@@ -24,6 +24,12 @@ producing a classifier quickly.
 - Random sampling must accept a seed.
 - All outputs should include analysis version.
 
+## Scientific philosophy
+
+- Do not optimise for classification accuracy.
+- Optimise for reproducible feature extraction.
+- Classifier development comes later.
+
 ## Preferred libraries
 
 numpy
