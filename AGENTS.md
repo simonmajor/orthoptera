@@ -63,6 +63,10 @@ Avoid introducing large dependencies without discussion.
 
 ## Testing
 
+Run all Python commands in the repository's `.venv`, initialised by
+`setup.sh`, including when inspecting or running historical prototypes. Do not
+rely on packages available to the system Python.
+
 New feature extraction code should include tests.
 
 Existing behaviour should not regress.
