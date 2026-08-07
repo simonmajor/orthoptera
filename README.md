@@ -1,182 +1,193 @@
 # orthoptera
 
-Tools for investigating and analysing the acoustic recordings of Orthoptera
-(crickets, grasshoppers and related insects).
+A reproducible research project for investigating the acoustic signals of Orthoptera — crickets, grasshoppers and related insects.
 
-This is a personal research project arising from the investigation of an
-unidentified nocturnal insect recording made in Kent, UK. The eventual aim is
-to combine reproducible signal analysis with a reference corpus of recordings,
-including material obtained from Xeno-canto, to help identify and compare
-Orthoptera calls.
+The project began with an unidentified nocturnal insect recording made in Kent, UK. The longer-term aim is to develop tools that can compare Orthoptera recordings using measurable acoustic characteristics, supported by a reproducible reference corpus of recordings.
 
-The project is deliberately being developed incrementally. The current code
-base is infrastructure rather than a finished identification system.
+The emphasis is on **understanding and validating acoustic features before attempting reliable species identification**. This is a research project, not yet a finished classifier.
 
 ## Current status
 
-The repository currently contains:
+The project has moved beyond the original exploratory scripts into a structured Python package.
 
-- a Python package under `src/orthoptera/`;
-- signal-processing, analysis, database and Xeno-canto API components;
-- a cached client for searching and downloading Xeno-canto recordings;
-- unit tests using `pytest`;
-- a small set of reference recordings under `tests/data/`;
-- historical prototype analysis scripts and their source recording under
-  `pre_project_prototypes/`.
+At present:
 
-The Xeno-canto client currently supports:
+* the repository has a normal `src/`-layout Python package;
+* the original exploratory recordings and analysis scripts have been preserved as historical material;
+* a cached Xeno-canto client is implemented for searching and downloading reference recordings;
+* the beginnings of the signal, analysis and database layers are in place;
+* automated tests cover the implemented package functionality;
+* the production acoustic-analysis pipeline is **not yet complete**.
 
-- searching the public Xeno-canto recordings API;
-- optional API-key authentication;
-- paging through search results;
-- caching search responses;
-- downloading recordings;
-- caching downloaded audio;
-- avoiding accidental replacement of existing recordings.
+The current development priorities are tracked in [`ROADMAP.md`](ROADMAP.md).
 
-Feature extraction and automated species identification are **not yet
-implemented**.
+In particular, the next stages are to establish the database layer and build tested production components for chirp detection, feature extraction and comparison. The eventual roadmap includes species comparison and a dashboard, but these are future work rather than current capabilities.
 
-## Getting started
+## Where the project came from
 
-The project uses a local Python virtual environment.
+The original recording was made on 11 July 2026 at 23:08:17 in north-west Kent, on the North Downs.
 
-From the repository root:
+A 7.40-second repetitive section of the approximately 87.83-second recording was extracted for the initial investigation. The recording is preserved in:
 
-```sh
-./setup.sh
-source .venv/bin/activate
+`pre_project_prototypes/creature7s.wav`
+
+Several Python scripts (`analyse1.py` through `analyse5.py`) document the exploratory analysis that preceded the project being formalised.
+
+These scripts are **historical artefacts**. They are useful because they record observations, hypotheses, failed approaches and the reasoning that led to the current design. They are not the production analysis pipeline and their parameters should not be treated as scientifically validated.
+
+The distinction is documented in [`EXPERIMENTS.md`](EXPERIMENTS.md).
+
+## Current scientific approach
+
+The project is deliberately being developed incrementally.
+
+The intended analysis pipeline is broadly:
+
+```text
+WAV recording
+    ↓
+signal filtering
+    ↓
+envelope / chirp detection
+    ↓
+per-chirp feature extraction
+    ↓
+reference database
+    ↓
+comparison
 ```
 
-The development dependencies can also be installed directly with:
+The project is interested in features such as:
 
-pip install -e ".[dev]"
+* carrier frequency;
+* chirp duration;
+* inter-chirp interval;
+* the relationship between chirp and gap duration;
+* variability in these measurements;
+* amplitude and envelope shape;
+* internal pulse structure;
+* slower grouping or phrasing patterns.
 
-Run the test suite with:
+These are **candidate features**, not established species discriminators.
 
-python -m pytest
+A central methodological principle is that measurements from one recording should not automatically be interpreted as characteristics of a species. Multiple recordings and measurements of within-species variability are needed before apparent differences between species can be considered meaningful.
 
-The repository is structured as a normal src-layout Python package, so code
-should be imported through the orthoptera namespace rather than by relying on
-repository-root module paths.
+For comparing temporal signal shapes, the project has selected **Dynamic Time Warping (DTW) on chirp envelopes** as the current intended approach. The rationale is that DTW can accommodate modest differences in timing or tempo that would otherwise make direct correlation less useful. This is an architectural/methodological decision recorded in [`DECISIONS.md`](DECISIONS.md).
 
-## Repository layout
+The detailed scientific history and limitations are in [`EXPERIMENTS.md`](EXPERIMENTS.md), while the intended architecture is described in [`DESIGN.md`](DESIGN.md).
 
+## Xeno-canto reference recordings
+
+The project uses recordings from [Xeno-canto](https://xeno-canto.org/) as reference material.
+
+The repository contains a small number of reference recordings for testing. The Xeno-canto client can search the public API, optionally authenticate with an API key, page through results, cache responses, download recordings and cache downloaded audio.
+
+For initial corpus development, the project has deliberately restricted the search to:
+
+```text
+gen:Gryllus q:A id?:no len:"10-90"
+```
+
+This provides a manageable initial corpus of approximately 173 recordings rather than attempting to download an entire genus indiscriminately.
+
+The client and its tests are under:
+
+`src/orthoptera/xcapi/`
+
+The cached corpus itself is kept separate from the committed source tree.
+
+## Repository structure
+
+```text
 orthoptera/
 ├── src/
 │   └── orthoptera/
 │       ├── analysis/       Analysis and comparison
 │       ├── database/       Database schema and queries
-│       ├── signal/         Signal-processing components
+│       ├── signal/         Signal processing and chirp analysis
 │       └── xcapi/          Xeno-canto API integration
 │
 ├── tests/
-│   ├── data/               Small local/reference recordings
-│   └── ...                 Automated tests
+│   └── data/               Small reference recordings
 │
 ├── pre_project_prototypes/
-│   ├── analyse1.py
-│   ├── analyse2.py
-│   ├── analyse3.py
-│   ├── analyse4.py
-│   ├── analyse5.py
-│   └── creature7s.wav
+│   ├── analyse1.py ...     Historical exploratory analyses
+│   └── creature7s.wav      Original mystery recording excerpt
 │
-├── AGENTS.md               Guidance for coding agents
-├── CONTRIBUTING.md         Development and vibe-coding workflow
-├── DESIGN.md               Current architecture and design
-├── DECISIONS.md            Architectural and project decisions
+├── AGENTS.md               Guidance for AI coding agents
+├── CONTRIBUTING.md         Development and human/AI collaboration workflow
+├── DESIGN.md               Intended architecture and scientific design
+├── DECISIONS.md            Significant decisions and their rationale
 ├── EXPERIMENTS.md          Historical experiments and observations
-├── ROADMAP.md              Planned development
-└── README.md               This document
-The recordings
+├── ROADMAP.md              Current and planned work
+└── README.md               Human-oriented project overview
+```
 
-The original mystery recording is a short extract from a longer field
-recording made in north-west Kent. It is retained in the repository as
-pre_project_prototypes/creature7s.wav because it is the principal specimen
-that motivated the project.
+## Getting started
 
-The prototype analysis scripts (analyse1.py through analyse5.py) record
-the early exploratory work performed before the repository existed. They are
-historical artefacts rather than part of the current package and should not be
-treated as the project's production analysis pipeline.
+The project uses a repository-local Python virtual environment.
 
-A small number of Xeno-canto recordings are also retained under
-tests/data/ as local reference material. Larger datasets should not normally
-be committed to the repository.
+From the repository root:
 
-## Xeno-canto
+```bash
+./setup.sh
+source .venv/bin/activate
+```
 
-The project uses recordings from Xeno-canto as a
-reference corpus.
+Alternatively, development dependencies can be installed with:
 
-The current client is intentionally small. For example, a search can be
-expressed using Xeno-canto's query syntax, such as:
+```bash
+pip install -e ".[dev]"
+```
 
-gen:Gryllus q:A id?:no len:"10-90"
+Run the test suite with:
 
-This provides a useful way of constructing controlled reference sets rather
-than downloading an entire genus or family indiscriminately.
+```bash
+python -m pytest
+```
 
-Downloaded recordings and API responses are cached locally so that subsequent
-analysis does not repeatedly depend on the remote service. Cache and dataset
-management are intentionally kept separate from the committed source tree.
-
-Consult src/orthoptera/xcapi/ and its tests for the current API interface.
-
-## Development philosophy
-
-The project is being developed as a reproducible research tool rather than as
-a one-off script.
-
-In particular:
-
-exploratory work should be preserved when it provides useful scientific
-context;
-algorithms should be developed incrementally and tested against known
-recordings;
-reference data should be identifiable and reproducible;
-external API activity should be cached where practical;
-architectural changes should be documented rather than inferred from
-implementation history;
-automated coding agents should make small, reviewable changes;
-experimental results should not silently become production assumptions.
-
-The project deliberately separates what the system is intended to become
-from what has actually been demonstrated. The latter is especially
-important for acoustic identification, where apparently useful measurements
-can turn out to be artefacts of a particular recording or analysis method.
+Development and historical analysis commands should be run using the repository's `.venv`, rather than relying on packages installed into the system Python environment.
 
 ## Project documentation
 
-The other Markdown files provide the detailed project context:
+The repository deliberately separates different kinds of knowledge.
 
-AGENTS.md — instructions and constraints for coding agents. Start here
-when working on the codebase with an AI coding agent.
-CONTRIBUTING.md — practical development and vibe-coding workflow,
-including guidance for humans collaborating with coding agents.
-DESIGN.md — the current architectural design.
-DECISIONS.md — significant decisions and their rationale.
-EXPERIMENTS.md — historical experiments, observations and results.
-ROADMAP.md — intended future development.
+* [`DESIGN.md`](DESIGN.md) — the intended architecture and scientific design.
+* [`DECISIONS.md`](DECISIONS.md) — significant architectural and methodological decisions and their rationale.
+* [`EXPERIMENTS.md`](EXPERIMENTS.md) — exploratory work, measurements, hypotheses, failed approaches and limitations.
+* [`ROADMAP.md`](ROADMAP.md) — planned development and outstanding work.
+* [`CONTRIBUTING.md`](CONTRIBUTING.md) — development workflow and collaboration practices, including work with AI coding agents.
+* [`AGENTS.md`](AGENTS.md) — instructions specifically for AI coding agents working in the repository.
 
-These documents are complementary rather than interchangeable. In particular,
-the README is intended to explain the project to a human encountering it for
-the first time; it is not intended to duplicate the detailed instructions
-given to coding agents.
+These documents are complementary, but they are not interchangeable.
 
-## Status and expectations
+**This README is an orientation document for humans. It should not be treated as the authoritative source for architecture, decisions, experiments, workflow or project priorities.** Those are defined by the documents above.
 
-This project is exploratory. Passing tests demonstrate that the implemented
-software behaves as specified; they do not establish that a particular signal
-feature is biologically meaningful or that an identification method is
-reliable.
+## Development philosophy
 
-Scientific conclusions should therefore be supported by the recordings,
-measurements and experiments that produced them, rather than by the existence
-of code which happens to produce a plausible result.
+Orthoptera is intended to become a reproducible research tool rather than a one-off analysis script.
 
-## Licence
+The project therefore prioritises:
 
-See LICENSE.
+* reproducible measurements;
+* explicit and configurable analysis parameters;
+* preservation of raw recordings;
+* separation of feature extraction from classification;
+* tests for production analysis components;
+* reference data with identifiable provenance;
+* caching of external data where practical;
+* preservation of useful exploratory work;
+* clear separation between measured observations, interpretations and future hypotheses.
+
+Passing tests establishes that implemented software behaves as specified. It does not establish that an acoustic feature is biologically meaningful or that an identification method is reliable.
+
+The scientific conclusions of the project must therefore remain grounded in recordings, measurements and experiments rather than in the fact that software produces plausible results.
+
+## For AI coding agents
+
+If you are an AI coding agent entering this repository, start with [`AGENTS.md`](AGENTS.md).
+
+It identifies the project documents that should be consulted and explains which document is authoritative for which kind of information.
+
+In particular, do not infer the current architecture or development priorities from this README alone. Read the relevant project documents before making changes, and use the repository itself rather than an earlier conversation as the persistent project record.
 

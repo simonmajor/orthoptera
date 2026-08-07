@@ -28,6 +28,8 @@ If development workflow or AI-agent behaviour is relevant, consult `CONTRIBUTING
 
 Do not duplicate detailed project knowledge from these documents into this file merely to make it easier to find. This file should provide the steering needed to discover the appropriate source.
 
+README.md is a human-oriented project overview and is not a source of truth. Do not use it to resolve architectural, methodological, workflow or roadmap questions; consult the relevant project document identified above.
+
 ### Persistent knowledge
 
 When new durable knowledge is created:
