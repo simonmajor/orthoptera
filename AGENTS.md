@@ -1,5 +1,26 @@
 # AGENTS.md
 
+## Project context
+
+Orthoptera is a research-oriented acoustic analysis project. The repository
+is the authoritative persistent project state. Do not assume that context from
+a previous AI session remains available.
+
+Before significant changes:
+1. Read AGENTS.md.
+2. Read DESIGN.md.
+3. Read ROADMAP.md.
+4. Read DECISIONS.md.
+
+When a significant architectural or methodological decision is made, record
+it in DECISIONS.md rather than relying on conversation history.
+
+When a feature is completed, update ROADMAP.md and record important experimental
+or methodological results in the appropriate documentation.
+
+Prefer small, independently testable changes and avoid speculative
+architecture.
+
 ## Purpose
 
 This repository develops a reproducible toolkit for analysing Orthoptera
