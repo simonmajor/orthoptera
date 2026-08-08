@@ -73,6 +73,25 @@ Derived representations such as clipped WAVs, normalised envelopes and spectrogr
 
 Detection provenance must remain available so that exploratory thresholds or algorithms are not mistaken for biological annotations.
 
+### Specification boundary: representation versus implementation
+
+The acoustic-event representation specifies properties that the production representation must be capable of carrying. It does not necessarily specify how those properties are detected, calculated or encoded.
+
+The repository contains exploratory acoustic analyses, notably `exploratory/acoustic_survey.py`. These provide experimental evidence about candidate detection methods and representations. They are not production interfaces or implicit specifications.
+
+Consequently, the exploratory implementation must not be taken to establish:
+
+* a production event class or API;
+* a particular event-detection algorithm;
+* the semantics or calculation of frequency-band or spectral fields;
+* the definition or scale of amplitude, quality or confidence metrics;
+* the criteria or representation for temporal hierarchy;
+* a database schema.
+
+Where this design specifies that a property is required but does not define its semantics or calculation, that aspect remains open until explicitly decided.
+
+The distinction between **decided**, **experimentally demonstrated** and **unresolved** is defined in `DECISIONS.md` under "Exploratory analysis is evidence, not a production interface".
+
 ## Frequency and time-frequency analysis
 
 The initial survey found useful event-associated spectral components around both approximately 4 kHz and 16 kHz in the small reference corpus.

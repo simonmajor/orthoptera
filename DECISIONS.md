@@ -32,3 +32,31 @@ The initial corpus survey demonstrated that the same exploratory event detector 
 
 The event representation supplied to DTW must therefore be selected and documented as part of the validated feature-extraction methodology.
 
+## 2026-08-08 — Exploratory analysis is evidence, not a production interface
+
+Exploratory acoustic analysis is used to investigate candidate representations, detection methods and measurable properties. Its results are evidence for design decisions, but exploratory code does not by itself establish a production API, data structure, algorithm, parameter semantics or storage schema.
+
+For acoustic-event work, three statuses must be distinguished:
+
+* **Decided** — explicitly specified by `DESIGN.md` or established by an architectural decision.
+* **Experimentally demonstrated** — observed or implemented in exploratory work, but not adopted as a production contract.
+* **Unresolved** — deliberately left open and requiring a further design or scientific decision.
+
+A requirement that an event representation *carry* a property does not, by itself, determine how that property is calculated, normalised, stored or interpreted.
+
+In particular, the exploratory acoustic survey does not establish:
+
+* a production `AcousticEvent` class or API;
+* a production event-detection algorithm;
+* the semantics or calculation of frequency-band fields;
+* a production amplitude or envelope metric;
+* a production quality or confidence metric;
+* the representation or detection of temporal hierarchy;
+* a production database schema.
+
+The structures and parameters used by `exploratory/acoustic_survey.py` may be used as experimental reference material, but must not be promoted into production interfaces by inference.
+
+Where the design establishes a required property but leaves its semantics or implementation unresolved, production implementation requires an explicit decision rather than inference from exploratory code.
+
+This distinction is particularly important before implementing acoustic detection, event storage or downstream comparison. Exploratory parameters must not become production defaults until the representation and detection behaviour have been independently validated, as required by the acoustic-event validation decision.
+
