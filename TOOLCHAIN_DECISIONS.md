@@ -1,127 +1,114 @@
 # Toolchain Decisions
 
-This document records deliberate decisions about how AI tools are used to develop and investigate Orthoptera.
+This document records decisions about how AI tools are used in the development of Orthoptera.
 
-It is not a record of every observation or experiment. Experimental evidence belongs in `TOOLCHAIN_EXPERIMENTS.md`; conclusions supported by that evidence belong in `TOOLCHAIN_FINDINGS.md`.
+It is deliberately separate from the technical architecture of Orthoptera. Technical design decisions belong in `DECISIONS.md`; observations from experiments with the AI toolchain belong in `TOOLCHAIN_EXPERIMENTS.md`.
 
-Decisions here govern the workflow unless explicitly superseded.
+Only actual decisions belong here. Observations, hypotheses and unresolved questions should remain in `TOOLCHAIN_EXPERIMENTS.md`.
 
-## Retrospective decisions
+---
 
-### 2026-08-09 — Work within established account tiers and a zero-cost preference
+## Decisions
 
-The project predates the current toolchain experiments and the preference to avoid additional expenditure on AI tooling is an established constraint.
+### 2026-08 — Cost constraints are a project constraint
 
-We should therefore first investigate what can be achieved with the existing account tiers, locally available tools, open-source software, and already-connected services.
+The project has a **zero-cost preference** for AI and development tooling.
 
-Discovering a potentially useful paid service does not imply that it should be adopted. Such discoveries belong in `TOOLCHAIN_WISHLIST.md`.
+This preference predates the Orthoptera project and therefore forms part of the background constraint within which the AI workflow is being developed.
 
-### 2026-08-09 — Use a two-tier ChatGPT + Codex workflow
+"Zero-cost" does not mean that only free software may ever be used. It means that paid services or upgrades should not be assumed to be available when designing the workflow. Useful paid capabilities may instead be recorded for future consideration in `TOOLCHAIN_WISHLIST.md`.
 
-The established workflow separates:
+---
 
-* **ChatGPT** as the architectural/reasoning AI, responsible for understanding the project, making or reviewing architectural decisions, and directing implementation work.
-* **Codex** as the implementation AI, responsible for repository-local implementation and associated coding tasks.
+### 2026-08 — Initial two-tier AI workflow
 
-This division is a working arrangement rather than a claim that either tool is intrinsically incapable of the other's tasks.
+The initial AI workflow uses two principal tiers:
 
-The current toolchain experiments are investigating how this division should evolve as additional AI tiers, models and agent roles become available.
+1. **ChatGPT** for architectural reasoning, design discussion and higher-level analysis.
+2. **Codex** for implementation work against the local repository.
 
-### 2026-08-09 — Document the AI coding workflow in CONTRIBUTING.md
+The division is intended to keep architectural decisions and implementation work distinct while allowing the implementation tier to work directly with the repository.
 
-The practical workflow for contributors and AI coding agents should ultimately be documented in `CONTRIBUTING.md`.
+This is a working arrangement rather than a claim that these are the only appropriate tools for the project.
 
-`AGENTS.md` should contain instructions that an agent must follow when operating in the repository; `CONTRIBUTING.md` should explain the wider working practices.
+---
 
-Toolchain experimentation should therefore inform these documents rather than creating a competing permanent workflow manual.
+### 2026-08 — Working with AI coding agents belongs in contributor documentation
 
-### 2026-08-09 — The local-corpus acoustic survey was correctly delegated to Codex, but exposed a cost problem
+The operational workflow for AI-assisted development should be documented as part of the project's contributor/agent guidance rather than in a separate toolchain guide.
 
-Given the established two-tier workflow, using Codex to perform the ad hoc local-corpus acoustic survey was the correct allocation of responsibility: it required repository-local execution, local files and computational experimentation.
+The principal locations are:
 
-However, the task also consumed a substantial amount of model context/token budget.
+* `CONTRIBUTING.md` for human-facing workflow and contributor guidance;
+* `AGENTS.md` for instructions that must be available to coding agents.
 
-This is an important distinction:
+This avoids creating a second workflow document that could diverge from the actual project instructions.
 
-* the **tool choice was appropriate** under the established workflow;
-* the **way the task was conducted may not have been efficient**.
+---
 
-The toolchain experiments should therefore investigate whether such computationally intensive exploratory work can be performed more economically without weakening the architectural/implementation separation.
+### 2026-08 — The local acoustic survey was appropriately delegated, but exposed a cost issue
 
-### 2026-08-09 — Establish a separate toolchain knowledge base
+Given the established two-tier workflow, using Codex for the ad hoc local-corpus acoustic survey was the appropriate allocation of work.
 
-The AI workflow has now generated enough observations, methodological lessons and tool-specific knowledge that keeping them solely in conversation history is no longer adequate.
+The task involved local files, exploratory analysis and implementation-oriented investigation, all of which fit the implementation tier.
 
-A separate toolchain documentation set will therefore be maintained outside the core Orthoptera design documentation:
+However, the work also demonstrated that a technically appropriate allocation can still be expensive in token/context terms.
 
-* `TOOLCHAIN_EXPERIMENTS.md` — experimental record and observations
-* `TOOLCHAIN_DECISIONS.md` — deliberate workflow decisions
-* `TOOLCHAIN_FINDINGS.md` — established knowledge derived from experiments
-* `TOOLCHAIN_WISHLIST.md` — useful capabilities identified but not currently adopted
+This observation motivated investigation of alternative AI workflows, including GitHub Copilot CLI, delegation and session-level usage controls.
 
-This separation is itself a deliberate decision.
+The decision is therefore not that Codex should or should not be used for similar work in future. The decision is that **tool allocation should be evaluated both for task suitability and for resource cost**.
 
-The purpose is to preserve useful knowledge without allowing toolchain-specific observations, transient capabilities, or currently unaffordable tooling to pollute the project's architectural documentation.
+---
 
-## Decision-making principles
+### 2026-08 — Toolchain knowledge should be captured explicitly
 
-### Evidence before architecture
+The investigation of AI tooling has itself become a project concern worth documenting.
 
-Tool behaviour should be established experimentally where practical rather than inferred from appearances, model explanations, or assumptions about internal architecture.
+Tool behaviour can affect:
 
-In particular, the existence of:
+* reproducibility;
+* context availability;
+* model selection;
+* delegation;
+* token consumption;
+* AI-credit consumption;
+* recovery of work;
+* the amount of background context required by an agent.
 
-* session state,
-* agent state,
-* MCP connections,
-* command history,
-* generated files,
-* or context outside the visible prompt
+Useful knowledge discovered through experiments should therefore be persisted in the repository rather than relying on conversation history.
 
-must not automatically be interpreted as model memory.
+The toolchain documentation is divided as follows:
 
-### Keep experiments separate from project requirements
+* `TOOLCHAIN_EXPERIMENTS.md` — observations and experimental results;
+* `TOOLCHAIN_DECISIONS.md` — decisions made as a consequence;
+* `TOOLCHAIN_WISHLIST.md` — useful capabilities that are not currently adopted;
+* `CONTRIBUTING.md` — human-facing workflow;
+* `AGENTS.md` — agent-facing workflow and guardrails.
 
-A toolchain experiment may reveal a useful capability without implying that Orthoptera should depend on it.
+---
 
-Conversely, an experiment may reveal a limitation without requiring an immediate change to the project architecture.
+### 2026-08 — Avoid unnecessary background context
 
-Project requirements belong in the project documentation; toolchain observations belong in the toolchain documentation until there is a deliberate decision to promote them.
+The AI workflow should avoid loading large amounts of background material merely because it exists.
 
-### Prefer the cheapest adequate capability
+The project is expected to use multiple AI tiers and potentially different specialist roles. Instructions and supporting material should therefore be structured so that an agent receives the context necessary for its particular task without automatically receiving the entire history of the project.
 
-Where several available approaches can perform a task adequately, prefer the approach consistent with the project's established zero-cost constraint and existing account tiers.
+The precise structure of agent-specific instructions remains an experimental/workflow question and is not prescribed here.
 
-This does not mean avoiding experimentation with more capable tools. It means distinguishing:
+---
 
-* what is useful to know,
-* what is useful to have,
-* and what we are actually prepared to adopt.
+## Open questions
 
-### Minimise unnecessary context
+The following are deliberately **not decisions**:
 
-As the workflow develops multiple AI tiers and potentially specialised roles, agents should receive the minimum context necessary to perform their task correctly.
+* the final number and division of AI tiers;
+* whether GitHub Copilot CLI becomes part of the regular workflow;
+* the exact role of delegated/subagent workflows;
+* how fresh an AI session must be for reproducible experiments;
+* how AI credits relate to token consumption;
+* which repository instructions should be shared by all agents;
+* whether specialist agent instructions should be split into subordinate documents;
+* which paid capabilities, if any, would justify departing from the zero-cost preference.
 
-Repository documentation should therefore be structured so that:
-
-* project-wide invariants are easy to discover;
-* role-specific instructions can be scoped appropriately;
-* experimental history does not become mandatory background context;
-* historical observations are not repeatedly injected into implementation tasks.
-
-This principle will inform future experiments concerning `AGENTS.md` and subordinate instruction documents.
-
-## Relationship to other documentation
-
-`AGENTS.md` contains mandatory repository instructions for AI agents.
-
-`CONTRIBUTING.md` contains the practical development workflow, including the eventual documented approach to working with AI coding agents.
-
-`TOOLCHAIN_EXPERIMENTS.md` records what we tried and what happened.
-
-`TOOLCHAIN_FINDINGS.md` records knowledge that has survived the distinction between observation and inference.
-
-`TOOLCHAIN_WISHLIST.md` records useful capabilities that are not currently adopted.
-
-None of the toolchain documents should silently override project architecture or repository instructions.
+These remain subjects for `TOOLCHAIN_EXPERIMENTS.md` and future decisions.
 

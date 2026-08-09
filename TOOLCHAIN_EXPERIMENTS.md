@@ -1,388 +1,619 @@
 # Toolchain Experiments
 
-This document records experiments investigating the behaviour of the AI coding toolchain used alongside the Orthoptera project, principally GitHub Copilot CLI and its agents, models, MCP servers, session state, context handling, and persistence.
+This document records experiments and observations about the AI tooling used to develop Orthoptera.
 
-It is deliberately separate from the main project documentation. The purpose is to record observations and experimental results without allowing assumptions about the toolchain to become project requirements or architectural decisions.
+It is deliberately separate from the project's technical architecture. The purpose is to build an empirical understanding of how the toolchain behaves, particularly where that behaviour affects cost, context, reproducibility, delegation, and the reliability of AI-assisted development.
 
-## Experimental principles
-
-The experiments should distinguish:
-
-* **Observed** — directly visible in the CLI or otherwise independently established.
-* **Reported** — information explicitly returned by a tool or command.
-* **Inferred** — a plausible interpretation which has not yet been established.
-* **Unknown** — something we have not yet determined.
-
-We should avoid treating an apparent explanation of tool behaviour as established merely because it is plausible.
-
-Where practical, record:
-
-* exact prompt or command used;
-* model displayed by the CLI;
-* AIC usage displayed by the CLI;
-* relevant `/content`, `/session`, or other command output;
-* active agents/subagents;
-* MCP servers;
-* relevant session or repository state;
-* whether the experiment was performed in a fresh or continuing session;
-* the outcome, including failures or stalls.
+The distinction between **observation** and **interpretation** is important. We should not turn plausible explanations of tool behaviour into facts until they have been tested.
 
 ---
 
-## Current observations
+## 1. Scope and purpose
 
-### Copilot CLI session
+Orthoptera is being developed with AI coding assistance. We are experimenting with several AI tiers and with different ways of dividing work between them.
 
-The CLI can display the currently selected model in the bottom-right corner of the interface.
+The experiments documented here are intended to answer questions such as:
 
-In the experiments so far, the model displayed was:
+* How much context does an agent actually receive?
+* What information persists within or between sessions?
+* How do models and subagents affect cost and context usage?
+* When is delegation useful, and when does it introduce unnecessary cost?
+* Which repository information needs to be made explicit because an agent cannot safely be expected to recover it from context?
+* How reproducible is an experiment when the AI tool has its own session history, caches, or persistent state?
+* Which toolchain capabilities are useful but currently unavailable within our zero-cost constraints?
 
-`gpt-5-mini`
+These experiments concern the **toolchain**, not Orthoptera's acoustic-analysis architecture.
 
-The model may change during a session or between delegated tasks. This has not yet been systematically tested.
+---
 
-The CLI also displays a session-level indicator above the prompt:
+# 2. Experiment A — Initial AI workflow
 
-`Session: 69.3 AIC used`
+## 2.1 Starting arrangement
 
-The meaning of AIC and the relationship between this figure, individual model calls, agents, and token usage has not yet been experimentally characterised.
+The initial working arrangement was a two-tier approach:
 
-### Context reporting
+1. **ChatGPT** as the architectural/reasoning AI.
+2. **Codex** as the implementation AI working against the local repository.
 
-The `/content` command reports context usage. An observed output was:
+This division reflected the desire to keep architectural decisions separate from implementation and to have the implementation agent work directly with the repository.
+
+The arrangement predates the more recent investigation of GitHub Copilot CLI.
+
+## 2.2 Acoustic survey
+
+The local acoustic survey was carried out using Codex.
+
+In retrospect, this was consistent with the established two-tier division: it was an implementation/exploration task involving the local corpus and repository tooling rather than an architectural decision.
+
+However, it also exposed a significant cost issue. The acoustic investigation involved substantial local analysis and a large AI context, making it relatively expensive in token terms.
+
+This prompted the current investigation into alternative AI workflows and into how context, delegation and model selection affect cost.
+
+---
+
+# 3. Experiment B — GitHub Copilot CLI reconnaissance
+
+The next experiment investigated GitHub Copilot CLI as a possible additional AI tier.
+
+The purpose was not initially to solve an Orthoptera problem. It was to understand the behaviour and capabilities of the toolchain itself.
+
+The experiment used repository reconnaissance tasks, including inspection of:
+
+* `AGENTS.md`
+* `DESIGN.md`
+* `DECISIONS.md`
+* `ROADMAP.md`
+* `EXPERIMENTS.md`
+* exploratory acoustic-analysis code
+* production stubs
+* package interfaces
+* tests
+
+The experiment also investigated Copilot's session, delegation, context and usage facilities.
+
+---
+
+## 3.1 Model selection
+
+Copilot displayed the active model in the CLI interface.
+
+During the experiment the model was observed as:
+
+> `gpt-5-mini`
+
+Earlier output associated with the delegated reconnaissance work identified another model:
+
+> `claude-haiku-4.5`
+
+The later `/diagnose` output explicitly reported:
+
+> Model switch noted earlier (claude-haiku-4.5 → gpt-5-mini)
+
+### Established observation
+
+The model used by Copilot can be observed through the CLI and may change during the lifetime of the work being investigated.
+
+### Not established
+
+We have not established:
+
+* what causes a model change;
+* whether the change is automatic model routing;
+* whether it is related to context, cost, availability or task type;
+* whether all parts of a session necessarily use the same model;
+* whether the displayed model describes every underlying operation.
+
+These should remain open experimental questions.
+
+---
+
+# 4. Copilot context accounting
+
+Copilot provides a `/content` command showing a breakdown of context usage.
+
+One observation during the experiment was:
 
 ```text
 Context Usage
 
 auto · 49k/128k tokens (38%)
 
-System Prompt     6.9k   (5%)
-System Tools      7.3k   (6%)
-MCP Tools         1.1k   (1%)
-Messages         33.2k  (26%)
-Free Space       73.0k  (57%)
-Buffer            6.4k   (5%)
+System Prompt       6.9k   (5%)
+System Tools        7.3k   (6%)
+MCP Tools           1.1k   (1%)
+Messages           33.2k  (26%)
+Free Space         73.0k  (57%)
+Buffer              6.4k   (5%)
 ```
 
-This establishes that the CLI exposes a breakdown of the current context, including messages, system material, MCP tools, and remaining context space.
+### Established observation
 
-It does **not**, by itself, establish what information is retained outside this context or how session persistence interacts with it.
+The CLI exposes at least these categories of context:
 
-### Session reporting
+* system prompt;
+* system tools;
+* MCP tools;
+* messages;
+* free space;
+* buffer.
 
-The `/session` command can show active sessions/activities.
+The displayed context window in this observation was 128k tokens.
 
-An observed output included:
+### Not established
 
-```text
-Sessions
+The display does not by itself establish:
 
-❯ ● Review Available Tools and MCP Servers (active)
-```
+* exactly which historical material is included in `Messages`;
+* whether session-state information is included there;
+* whether MCP information shown here represents persistent MCP state or merely tool definitions;
+* how the buffer is used;
+* whether all context shown is sent to every model call;
+* how context is reconstructed after compaction or model switching.
 
-The relationship between this session/activity representation and the underlying model context, agent state, or persistent state remains to be established.
-
-### Plugin reporting
-
-The correct command observed so far is:
-
-```text
-/plugin list
-```
-
-An observed response was:
-
-```text
-No plugins installed.
-```
-
-The CLI also reported that plugins can be installed from a marketplace.
-
-The presence or absence of plugins is therefore observable independently of MCP server availability.
-
-### MCP server state
-
-Following successful sign-in, the CLI reported:
-
-```text
-Signed in successfully as simonmajor!
-
-GitHub MCP Server: Connected
-
-MCP Servers reloaded: 1 server connected
-```
-
-A subsequent tool inventory reported GitHub MCP functionality including:
-
-* code search;
-* repository file retrieval;
-* user search;
-* Copilot Spaces access.
-
-The exact distinction between MCP tools, GitHub CLI functionality, and other CLI tools should be treated as an experimental question rather than assumed from their names.
-
-### Agents/subagents
-
-The CLI can delegate work to an `explore` agent.
-
-For example:
-
-```text
-Explore(gpt-5-mini) Inspect repo and report production acoustic-event representation and detection status...
-```
-
-The CLI subsequently displayed agent/task state separately from the main interactive prompt.
-
-Completed agents may remain represented in session state after completion. The persistence and reuse semantics of completed agents have not yet been established.
+Those questions require further experimentation.
 
 ---
 
-# Experiment A — Initial reconnaissance
+# 5. Copilot session state
 
-## Objective
+Copilot exposes session information through `/session`.
 
-Determine what an `explore` agent can discover about the repository and how much repository-specific context it can establish without being given detailed implementation instructions.
-
-## Method
-
-The task was delegated to an explore agent with instructions to inspect the repository, identify files relevant to acoustic-event representation, explain the actual data flow, and distinguish established facts from inference.
-
-The resulting investigation identified:
-
-* `DESIGN.md`
-* `DECISIONS.md`
-* `exploratory/acoustic_survey.py`
-* `src/orthoptera/xcapi/download.py`
-* production signal/database/analysis stubs
-* relevant tests
-
-The agent also ran the exploratory acoustic survey.
-
-## Observation
-
-The explore agent was capable of:
-
-1. inspecting multiple repository files;
-2. running repository code;
-3. producing a cross-file interpretation;
-4. distinguishing, at least in principle, established facts from inference.
-
-However, the first resulting implementation brief subsequently contained several assertions which went beyond what the repository actually established.
-
-A later, more restrictive reconnaissance prompt produced a substantially more cautious analysis.
-
-## Result
-
-The important experimental finding is therefore not simply that the agent can inspect the repository, but that **prompt constraints materially affect whether it reports repository facts or fills gaps by inference**.
-
-This motivated subsequent experiments using explicit prohibitions against:
-
-* proposing implementation details;
-* inferring APIs;
-* inferring data structures;
-* inferring algorithms;
-* inferring schemas;
-* filling unspecified design gaps.
-
----
-
-# Experiment B — Controlled reconnaissance
-
-## Objective
-
-Determine whether a fresh/repeated explore task can independently recover the repository's established state when explicitly instructed not to infer missing architecture.
-
-## Prompt
-
-The current controlled prompt is:
+The investigated session reported:
 
 ```text
-Delegate this to the explore agent. Inspect the repository and report the current state of the production acoustic-event representation and detection work.
+Session ID: 8d49da86-255d-44b8-9494-548a2b72164c
 
-Compare DESIGN.md, DECISIONS.md, ROADMAP.md, EXPERIMENTS.md, the exploratory acoustic implementation, relevant tests, package interfaces, and existing production stubs.
-
-For each aspect that appears to be specified, identify the exact repository-relative file and passage that establishes it, and classify it as:
-
-- decided
-- experimentally demonstrated
-- unresolved
-
-In particular, distinguish what the repository actually establishes from what could merely be inferred from the exploratory implementation.
-
-Do not propose code changes, APIs, data structures, algorithms, schemas, or solutions. Do not fill gaps by inference.
-
-The purpose is to determine the smallest set of facts that a coding agent can safely act on without making a new architectural decision.
-
-Cite repository-relative file paths throughout.
+Name: Review Available Tools and MCP Servers
+Duration: 10h 24m 15s
+Created: 08/08/2026, 20:15:27
+Modified: 08/08/2026, 20:15:27
+Directory: /Users/simonmajor/gh/chatgpt/orthoptera
+Log: /Users/simonmajor/.copilot/logs/process-1786216527485-28840.log
+Session: /Users/simonmajor/.copilot/session-state/8d49da86-255d-44b8-9494-548a2b72164c/events.jsonl
 ```
 
-## Observed execution
-
-The CLI initially reported:
+The session also exposed a session-state workspace containing:
 
 ```text
-Explore Executing task
+acoustic-event-implementation-brief.md
+production-status-acoustic-events.md
 ```
 
-and then:
+### Established observation
+
+Copilot maintains persistent session artefacts outside the repository, including:
+
+* a session log;
+* an `events.jsonl` file;
+* a session-state directory;
+* files created during the session.
+
+### Important practical observation
+
+The session-state artefacts allowed us to recover substantial work after the terminal presentation of the model's response became difficult to capture.
+
+The terminal display therefore should **not** be treated as the sole record of an AI experiment.
+
+### Not established
+
+The existence of session-state files does not by itself establish that all of their contents are supplied to subsequent model calls.
+
+In particular, we have not established what constitutes Copilot's effective "memory" between interactions or between sessions.
+
+---
+
+# 6. Delegated agents
+
+Copilot can delegate work to an `explore` agent.
+
+During the acoustic-event reconnaissance experiment, an explore agent was launched to inspect the repository.
+
+The session later reported:
 
 ```text
-Explore(gpt-5-mini) Inspect repo and report production acoustic-event representation and detection status...
+Explore subagent ran and completed (model gpt-5-mini).
+Metrics: 30 tool calls, ~290,532 tokens consumed, duration ~105.6s.
 ```
 
-The agent began by reading:
-
-* `tests/test_xcapi.py`
-* `tests/test_package.py`
-
-The run subsequently appeared to stall while the TUI itself remained responsive and allowed tab changes.
-
-## Current status
-
-The run has not yet established whether:
-
-* the agent itself stopped;
-* a tool invocation stalled;
-* background work continued;
-* the CLI was waiting for a result;
-* model execution changed;
-* the session remained active despite the apparent stall.
-
-These are **unknown**, not established explanations.
-
----
-
-# Persistence questions
-
-The experiments have raised several separate persistence questions.
-
-### Repository persistence
-
-Repository files obviously persist independently of the AI session.
-
-The important question is whether an agent is drawing only on the current repository state or also on additional session-level state.
-
-### Session persistence
-
-The CLI exposes a session-state directory and session-related commands.
-
-An observed session-state location has included:
+The session also identified completed agents including:
 
 ```text
-/Users/simonmajor/.copilot/session-state/...
+acoustic-event-representation
+acoustic-event-production-stat...
 ```
 
-This directory has contained files produced during agent work, including generated analysis documents.
+### Established observations
 
-This establishes that at least some agent-generated artefacts can exist outside the repository.
+* Delegated agents are separately identifiable.
+* A delegated agent can use a model independently identifiable from the main session.
+* Delegated work can involve substantial tool activity and token consumption.
+* The resulting work can be written to session-state artefacts.
+* `/diagnose` can expose execution metrics for completed delegated work.
 
-It does **not** establish that the model automatically reads all such files on subsequent tasks.
+### Important workflow observation
 
-### Agent persistence
+A delegation which appears simple from the user's perspective can consume a substantial amount of model/tool context.
 
-Completed agents have appeared in session listings after their work finished.
+The reconnaissance experiment therefore demonstrated that **delegation is not inherently a cost-saving mechanism**.
 
-It is currently unknown whether this represents:
+### Not established
 
-* retained conversational state;
-* retained task metadata;
-* retained tool state;
-* merely historical session information;
-* or some combination.
+We have not established:
 
-### MCP persistence
-
-An MCP server can remain connected after authentication and can be reloaded by the CLI.
-
-It is not yet established whether MCP connections themselves provide persistent conversational memory.
-
-### Model persistence
-
-The model displayed in the interface has so far been observed as `gpt-5-mini`.
-
-It is not yet established whether:
-
-* model selection is fixed for a session;
-* delegated agents independently select models;
-* Auto mode can change models during a task;
-* model changes affect retained context;
-* or model changes are relevant to the observed repository results.
+* exactly what context is passed to a delegated agent;
+* whether the parent conversation is passed in full;
+* whether repository instructions are independently loaded;
+* whether delegated agents share caches or other state with the parent;
+* whether the model choice is controlled by the parent or by Copilot;
+* how delegated-agent costs are calculated.
 
 ---
 
-# Experimental controls still needed
+# 7. AI-credit accounting
 
-Future experiments should vary one factor at a time where possible.
+Copilot exposes an AI-credit figure in the session interface.
 
-Useful comparisons include:
+During the experiment, the bottom-right/session area displayed:
 
-1. **Same session, repeated reconnaissance**
+> `Session: 69.3 AIC used`
 
-   * Tests what survives naturally within a continuing session.
+Later, `/session info` reported:
 
-2. **Fresh CLI session, same repository**
+```text
+AI Credits 69.3
+Tokens     ↑ 2.2m (1.7m cached, 191.8k written) • ↓ 58.4k (10.5k reasoning)
+```
 
-   * Tests what is available without the previous conversational context.
+Subsequently `/limits` reported:
 
-3. **Fresh session with the same repository but no session-state artefacts**
+```text
+Used in this session: 75.7 AI credits.
+```
 
-   * Tests whether external session artefacts affect results.
+### Established observations
 
-4. **Same task with different models**
+* Copilot reports AI-credit usage separately from token counts.
+* A session can consume millions of tokens while displaying a much smaller AI-credit number.
+* The AI-credit figure can increase as further model activity occurs.
+* `/session info` exposes both AI-credit and token accounting.
 
-   * Tests model-dependent behaviour.
+### Not established
 
-5. **Same task with and without delegated agents**
+We have **not** established a conversion between:
 
-   * Tests whether delegation changes available context or behaviour.
+* input tokens;
+* cached tokens;
+* output tokens;
+* reasoning tokens;
+* AI credits.
 
-6. **Same task with MCP connected/disconnected**
-
-   * Tests the contribution of MCP availability.
-
-7. **Same task with deliberately minimal context**
-
-   * Tests how much repository understanding comes from the repository itself versus accumulated session context.
-
-The purpose of these comparisons is to establish observations, not to assume a particular internal architecture.
-
----
-
-# Working terminology
-
-For this experiment, the following terms should not be treated as interchangeable:
-
-* **context** — information supplied to the model for a particular invocation;
-* **conversation/session** — the interactive CLI state visible through session commands;
-* **agent** — a delegated unit of model work;
-* **MCP server** — an external tool/service connection;
-* **repository state** — files and other persistent project contents;
-* **session-state** — files or state maintained outside the repository by the CLI;
-* **memory** — reserved term for persistence demonstrated to affect a later model invocation.
-
-In particular, the existence of session-state files or completed-agent records is **not sufficient evidence that the model has memory of their contents**.
+We should therefore avoid treating AI credits as a proxy for token count.
 
 ---
 
-# Status
+# 8. Session limits
 
-This document records the state of the toolchain investigation as observations accumulate.
+Copilot provides optional session AI-credit limits through `/limits`.
 
-It should not be treated as documentation of Copilot's internal architecture. Where behaviour has not been experimentally established, it should remain explicitly marked as unknown or inferred.
+The CLI reports:
 
-The principal experimental question is:
+```text
+Session limits are opt-in.
+They apply across the current conversation.
+The AI credit limit is a soft cap:
+usage is checked after model calls return,
+so one call may exceed the limit before the next one is blocked.
+```
 
-> **When an AI coding agent appears to "remember" repository-specific information, where did that information actually come from?**
+The experiment reported:
 
-The competing sources to distinguish experimentally are:
+```text
+Used in this session: 75.7 AI credits.
 
-1. the current prompt;
-2. current conversation context;
-3. repository files;
-4. tool/MCP results;
-5. persistent session state;
-6. delegated-agent state;
-7. model-level or service-level memory.
+Suggested limit: 112 AI credits.
+```
 
-No assumption should be made that any one of these is responsible until an experiment demonstrates it.
+The suggested limit was described as being based on historical full-session AI-credit usage for similar sessions using `claude-haiku-4.5`.
+
+### Established observations
+
+* Session limits are optional.
+* They apply across the current conversation.
+* `/clear` and `/new` reset used AI credits while retaining the configured limit.
+* The limit is a soft cap rather than a hard per-call ceiling.
+* Copilot can suggest a session limit based on historical usage.
+
+### Not established
+
+We have not established how the suggested limit is calculated in detail, nor whether the historical comparison is sufficiently similar to make it useful for Orthoptera experiments.
+
+---
+
+# 9. Cost of broad reconnaissance
+
+The acoustic-event reconnaissance was intentionally broad: an explore agent was asked to compare documentation, exploratory code, tests, package interfaces and production stubs.
+
+The resulting `/diagnose` report recorded:
+
+```text
+Explore subagent ran and completed (model gpt-5-mini).
+Metrics: 30 tool calls, ~290,532 tokens consumed, duration ~105.6s.
+```
+
+The session subsequently showed:
+
+```text
+AI Credits 69.3
+Tokens ↑ 2.2m ...
+```
+
+and later:
+
+```text
+Used in this session: 75.7 AI credits.
+```
+
+### Established observation
+
+Broad repository reconnaissance can generate substantial token and AI-credit consumption even when the requested result is a relatively concise report.
+
+### Operational consequence
+
+Large exploratory outputs also created practical handling problems:
+
+* output was large enough to be paged through temporary files;
+* copied terminal output became difficult to recover reliably;
+* the TUI presentation changed during the session;
+* the useful report was ultimately recoverable from session-state artefacts.
+
+### Not established
+
+We have not yet measured which component contributes most to the cost:
+
+* repository reading;
+* tool-call output;
+* model reasoning;
+* delegated-agent context;
+* repeated reads;
+* output generation;
+* caching behaviour.
+
+Future experiments should measure these separately where practical.
+
+---
+
+# 10. Copilot command history and session tooling
+
+The CLI provides several facilities relevant to experimentation:
+
+```text
+/session
+/session id
+/session info
+/session checkpoints
+/session files
+/session plan
+/diagnose
+
+/chronicle
+/chronicle standup
+/chronicle search
+/chronicle tips
+/chronicle cost-tips
+/chronicle improve
+
+/limits
+/limits set
+/limits predict
+/limits unset
+```
+
+### Observed behaviour
+
+`/session id` displayed the session ID and copied the raw ID to the clipboard.
+
+`/session info` provided particularly useful information about:
+
+* session identity;
+* duration;
+* repository directory;
+* logs;
+* session-state;
+* workspace files;
+* AI credits;
+* token usage.
+
+`/session files` listed files created in the session.
+
+`/session plan` reported whether a plan existed.
+
+`/diagnose` inspected the session history and provided a post-hoc summary of tool failures, model activity, token consumption and other observations.
+
+### Rough edges observed
+
+`/chronicle search` initially produced an internal SQL error:
+
+```text
+"multiple SQL statements are not allowed"
+```
+
+It subsequently retried with a single statement and returned no matching sessions.
+
+The terminal/TUI also proved awkward for copying long model responses into another environment.
+
+These are operational observations only; they do not establish the underlying implementation.
+
+---
+
+# 11. Session compaction and checkpoints
+
+During the experiment, Copilot compacted the conversation history and created a checkpoint:
+
+```text
+Checkpoint #1
+Acoustic-event status audit
+```
+
+The checkpoint preserved a substantial summary of:
+
+* work already performed;
+* files created;
+* repository inspection results;
+* established design facts;
+* unresolved questions;
+* technical details;
+* suggested continuation information.
+
+### Established observation
+
+Conversation compaction does not necessarily mean that all useful session information is simply lost. Copilot can create a checkpoint containing a summary of the preceding work.
+
+### Not established
+
+We have not established:
+
+* exactly how checkpoint contents are incorporated into subsequent model context;
+* whether the original messages remain accessible to the model;
+* how much information is lost during compaction;
+* whether compaction behaviour differs between models.
+
+---
+
+# 12. Current working hypotheses
+
+The following are **hypotheses to test, not established facts**.
+
+### 12.1 AI-tool memory
+
+Copilot appears to maintain information outside the immediate visible conversation, because session logs, events and session-state files exist.
+
+It is not yet known whether this should be described as "memory" in the model-facing sense.
+
+### 12.2 Freshness of experiments
+
+A new visible prompt within an existing session should not automatically be assumed to be equivalent to a fresh run.
+
+There are potentially several distinct states involved:
+
+* conversation history;
+* session-state;
+* checkpoints;
+* repository state;
+* MCP/tool state;
+* model/cache state;
+* CLI command history.
+
+The degree to which each affects a model invocation remains to be established.
+
+### 12.3 Model reproducibility
+
+Because the active model may change, reproducing an experiment may require recording the model actually used rather than merely recording the prompt.
+
+### 12.4 Delegation reproducibility
+
+Because delegated agents have their own execution and potentially their own model/context, delegation should be treated as an experimental variable.
+
+---
+
+# 13. Experimental discipline emerging from the work
+
+These are observations about what makes the experiments more reliable, rather than requirements on Orthoptera itself.
+
+For future toolchain experiments we should record, where available:
+
+* tool and version;
+* active model;
+* session ID;
+* repository revision;
+* prompt;
+* whether work was delegated;
+* delegated model, if visible;
+* context usage;
+* AI-credit usage;
+* token usage;
+* relevant session-state artefacts;
+* whether the run began from a fresh session;
+* whether compaction occurred.
+
+The purpose is to make it possible to distinguish a change in tool behaviour from a change in prompt, repository state, model, accumulated context or delegation.
+
+---
+
+# 14. Open experimental questions
+
+The following questions remain deliberately open.
+
+## Context and memory
+
+* What information from previous turns is actually supplied to each model call?
+* What information survives compaction?
+* What information survives `/clear`?
+* What information survives `/new`?
+* What information survives starting a completely new CLI process?
+* What information is obtained from session-state?
+* What information is obtained from repository files?
+* What MCP information is persistent, and what is reconstructed per invocation?
+
+## Models
+
+* Under what circumstances does Copilot switch models?
+* Is model selection deterministic?
+* Does delegation use the same model-selection mechanism as the parent session?
+* Does model selection affect AI-credit consumption?
+
+## Cost
+
+* How are AI credits calculated?
+* How do cached tokens affect AI-credit usage?
+* How do reasoning tokens affect it?
+* How much of the cost of a delegated task comes from tool output versus model reasoning?
+* How useful are `/limits predict` recommendations for our particular workloads?
+
+## Delegation
+
+* What context does an explore agent receive?
+* Does it independently load `AGENTS.md` and other repository instructions?
+* Does it inherit conversation history?
+* Does it inherit session-state?
+* Can delegation reduce the context burden on the parent agent, or does it primarily add another model invocation?
+
+## Reproducibility
+
+* What constitutes a genuinely fresh Copilot experiment?
+* Is `/new` sufficient?
+* Is `/clear` sufficient?
+* Does a fresh process behave differently?
+* Does the repository itself need to be reset?
+* Should model, context and session state be treated as experimental controls?
+
+---
+
+# 15. Relationship to other project documentation
+
+This document records **what we discover about the toolchain**.
+
+It does not define how Orthoptera should be architected or how contributors should work.
+
+The eventual workflow and guardrails for working with AI coding agents belong in the project's normal contributor/agent documentation, principally:
+
+* `CONTRIBUTING.md`
+* `AGENTS.md`
+
+Decisions about the toolchain itself belong in:
+
+* `TOOLCHAIN_DECISIONS.md`
+
+Useful capabilities that we identify but do not currently intend to adopt belong in:
+
+* `TOOLCHAIN_WISHLIST.md`
+
+This separation is intentional: experiments record observations, decisions record choices, and contributor/agent documentation records the resulting operational rules.
+
+---
+
+## 16. Status
+
+This document is an experimental record, not a specification.
+
+Where a statement is explicitly labelled an observation, it should be treated as evidence from the experiments described here. Where behaviour is marked as unresolved or hypothetical, it should not be promoted into project policy without further evidence or an explicit decision.
 
