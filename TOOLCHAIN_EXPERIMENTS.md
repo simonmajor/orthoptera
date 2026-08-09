@@ -326,6 +326,170 @@ Code Pathfinder provides a demonstrated structural treatment condition. GitNexus
 
 **Key distinction:** structural navigation is the capability under test; token/AI-credit reduction is an outcome hypothesis.
 
+## GitNexus — persistent hybrid repository retrieval
+
+**Status:** Candidate experiment justified; not an adoption decision.
+
+### Question
+
+Does a persistent repository representation combining lexical, structural and optional semantic retrieval reduce the amount of model-side repository exploration required for representative Orthoptera tasks?
+
+### Evidence motivating the experiment
+
+The GitNexus investigation found demonstrated support for:
+
+* AST-derived structural repository analysis;
+* symbol, reference, call and dependency relationships;
+* process and impact representations;
+* lexical/full-text retrieval;
+* optional embeddings and vector retrieval;
+* hybrid lexical/vector retrieval;
+* persistent on-disk repository indexing;
+* reuse across subsequent processes/sessions;
+* incremental/staleness handling;
+* Git-diff to structural-impact mapping;
+* bounded MCP responses;
+* discover → fetch workflows in which structural/search results can be returned without source content by default.
+
+These observations establish that the treatment condition is a real capability rather than a hypothetical architecture.
+
+They do **not** establish that the capability improves Orthoptera's AI workflow.
+
+### Hypothesis
+
+For repository-navigation tasks, persistent structural and semantic retrieval may reduce:
+
+* exploratory model turns;
+* source that must be retrieved and inspected;
+* cumulative model context;
+* cumulative model-side tokens;
+* or AI cost.
+
+These are outcome hypotheses, not established properties of GitNexus.
+
+### Control
+
+Use the existing repository-access pattern:
+
+```text
+agent
+ ├── filesystem
+ ├── shell
+ └── lexical search
+```
+
+### Treatment
+
+Add the candidate repository-index/retrieval layer:
+
+```text
+agent
+ ├── filesystem
+ ├── shell
+ ├── lexical search
+ └── persistent structural + semantic retrieval
+```
+
+Keep the model, task wording, repository revision, ordinary filesystem access and other relevant conditions fixed.
+
+### Initial tasks
+
+Use a small set of representative tasks covering different capability levels.
+
+1. **Structural discovery**
+
+   Locate a symbol and identify its callers/callees or relevant dependency relationships.
+
+2. **Semantic discovery**
+
+   Given a natural-language description of an Orthoptera subsystem or behaviour, identify the relevant implementation symbols/files.
+
+3. **Persistent reuse**
+
+   Repeat a suitable discovery task after restarting the retrieval service/process, testing whether the existing repository representation provides practical reuse rather than requiring reconstruction.
+
+4. **Optional Git-impact task**
+
+   Given a controlled change to a known symbol, identify affected symbols/processes using repository/Git-aware structural analysis.
+
+### Measurements
+
+Record independently:
+
+1. model turns;
+2. tool calls;
+3. cumulative input tokens;
+4. cumulative output tokens;
+5. cached tokens;
+6. AI credits;
+7. observable context occupancy;
+8. source volume retrieved;
+9. local indexing time;
+10. index size;
+11. retrieval/query latency;
+12. wall-clock time;
+13. task correctness;
+14. retrieval or graph errors;
+15. index-staleness/update behaviour.
+
+Indexing and local retrieval costs must be included in the comparison.
+
+Do not use tool-call count alone as the success criterion.
+
+The relevant comparison is approximately:
+
+```text
+local indexing/update cost
++
+retrieval cost
++
+model work
+```
+
+versus:
+
+```text
+ordinary repository exploration
++
+model work
+```
+
+### Interpretation
+
+A positive result requires more than a short individual retrieval response.
+
+The strongest evidence would be:
+
+> equivalent or better task correctness with lower total model-side work, after accounting for indexing and retrieval overhead.
+
+A result showing only that the retrieval tool can return compact results should be recorded as a **capability observation**, not as evidence of token or cost savings.
+
+### Relationship to the structural-navigation experiment
+
+The earlier Code Pathfinder investigation established **structural repository navigation** as a distinct Level-2 capability.
+
+GitNexus provides that capability plus persistent repository representation and optional semantic/vector retrieval.
+
+The experiments should therefore distinguish:
+
+```text
+lexical navigation
+        ↓
+structural navigation
+        ↓
+semantic retrieval
+        ↓
+persistent reuse
+```
+
+rather than treating all repository intelligence as one capability.
+
+### Current conclusion
+
+The experiment is justified because the candidate demonstrably supplies capabilities not present in the filesystem/shell baseline.
+
+No adoption decision follows from this experiment proposal.
+
 
 ## Current experimental conclusions
 

@@ -265,25 +265,63 @@ The default should therefore remain:
 
 ## Structural repository navigation
 
-**Status:** Capability identified; implementation not yet selected.
+Expose repository structure to AI roles through precomputed, queryable relationships rather than requiring those relationships to be reconstructed from raw source.
 
-Expose a repository's structural relationships to AI roles in addition to lexical filesystem/search access. Useful structural primitives include:
+Relevant capabilities include:
 
-* symbols and definitions;
+* symbol and definition discovery;
 * callers and callees;
-* imports and references;
-* dependency relationships;
-* call sites and source locations;
-* type/inheritance relationships where available;
-* data-flow relationships where reliably supported.
+* imports and dependencies;
+* inheritance and implementation relationships;
+* execution/process relationships;
+* impact analysis;
+* where useful, data-flow relationships.
 
-Prefer a **discover → fetch** workflow in which structural queries identify relevant symbols, relationships and source locations before the agent retrieves source text.
+Structural discovery should preferably support a **discover → fetch** workflow: use compact structural information to identify relevant symbols, files and locations before retrieving source.
 
-This is distinct from:
+This is distinct from lexical repository navigation. Lexical search answers questions such as "where does this text occur?"; structural navigation answers questions such as "what symbol is this, where is it defined, and what depends on it?"
 
-* **lexical repository navigation** — finding paths and text;
-* **semantic repository retrieval** — selecting repository content by natural-language relevance;
-* **persistent repository knowledge** — retaining a reusable repository representation across processes/sessions.
+---
 
-A structural navigation layer should not be assumed to provide semantic/vector retrieval, persistent knowledge, bounded model context, or token/cost savings unless those capabilities are independently demonstrated.
+## Persistent hybrid structural + semantic repository retrieval
+
+Investigate the capability of maintaining a persistent, queryable repository representation that combines:
+
+* structural program relationships;
+* lexical retrieval;
+* optional semantic/vector retrieval;
+* repository/process/module context;
+* selectively retrievable source.
+
+The representation should be reusable across tool invocations and AI sessions, with appropriate mechanisms for detecting repository changes and updating or invalidating stale information.
+
+The intended workflow is:
+
+```text
+repository
+    ↓
+persistent analysis/index
+    ↓
+lexical + structural + optional semantic retrieval
+    ↓
+relevant symbols / relationships / locations
+    ↓
+targeted source retrieval
+    ↓
+AI context
+```
+
+This should be treated as a capability to investigate, not as a requirement to adopt a particular implementation or product.
+
+The desired properties are:
+
+* persistent reuse rather than reconstruction on every session;
+* structural relationships in addition to text search;
+* optional semantic retrieval rather than assuming all repository questions are lexical or structural;
+* bounded, selectively retrievable results;
+* explicit handling of index freshness;
+* compatibility with ordinary filesystem/source retrieval;
+* measurable behaviour and cost rather than assumed token savings.
+
+Potential benefits such as reduced model context, fewer exploratory turns, lower token consumption or lower AI cost remain hypotheses until measured.
 
