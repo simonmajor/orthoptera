@@ -263,3 +263,27 @@ The default should therefore remain:
 
 > **Prefer the smallest capability that solves the demonstrated problem.**
 
+## Structural repository navigation
+
+**Status:** Capability identified; implementation not yet selected.
+
+Expose a repository's structural relationships to AI roles in addition to lexical filesystem/search access. Useful structural primitives include:
+
+* symbols and definitions;
+* callers and callees;
+* imports and references;
+* dependency relationships;
+* call sites and source locations;
+* type/inheritance relationships where available;
+* data-flow relationships where reliably supported.
+
+Prefer a **discover → fetch** workflow in which structural queries identify relevant symbols, relationships and source locations before the agent retrieves source text.
+
+This is distinct from:
+
+* **lexical repository navigation** — finding paths and text;
+* **semantic repository retrieval** — selecting repository content by natural-language relevance;
+* **persistent repository knowledge** — retaining a reusable repository representation across processes/sessions.
+
+A structural navigation layer should not be assumed to provide semantic/vector retrieval, persistent knowledge, bounded model context, or token/cost savings unless those capabilities are independently demonstrated.
+

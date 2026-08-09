@@ -259,6 +259,74 @@ This is potentially relevant to workflows in which some AI roles should be inspe
 
 ---
 
+## Structural versus lexical repository navigation
+
+**Status:** Experiment justified; not yet an adoption decision.
+
+Recent investigation of Code Pathfinder demonstrates a concrete **structural repository-navigation** capability: a local analysis layer can construct symbols, modules and program relationships such as callers/callees and expose compact structural queries to an AI agent. This provides a potential discovery layer above filesystem/`rg` navigation.
+
+The relevant hypothesis for Orthoptera is:
+
+> Structural repository navigation may reduce model-side repository exploration by allowing relationships to be established locally before source is retrieved.
+
+This hypothesis must not be conflated with the capability itself. In particular, the existence of a structural index is **not evidence** of reduced context occupancy, cumulative tokens, cached tokens, AI credits or monetary cost.
+
+A controlled experiment should compare representative repository-navigation tasks using:
+
+**Control**
+
+```text
+agent
+ ├── filesystem
+ └── rg/shell
+```
+
+**Treatment**
+
+```text
+agent
+ ├── filesystem
+ ├── rg/shell
+ └── structural repository navigation
+```
+
+Hold constant:
+
+* model;
+* reasoning/context configuration;
+* task wording;
+* repository revision;
+* system prompt;
+* ordinary tools.
+
+Measure independently:
+
+1. model turns;
+2. tool calls;
+3. cumulative input tokens;
+4. cumulative output tokens;
+5. cached tokens;
+6. AI credits;
+7. context occupancy where observable;
+8. source volume retrieved;
+9. local indexing time;
+10. index/storage overhead;
+11. query latency;
+12. wall-clock time;
+13. task correctness;
+14. structural-navigation errors or incomplete relationships.
+
+The experiment should test tasks for which structural relationships are actually relevant, such as caller discovery, dependency tracing and change-impact analysis.
+
+The success criterion should not be "fewer tool calls". The useful result would be:
+
+> **equal or better task correctness with lower total model-side work after accounting for local indexing/query cost.**
+
+Code Pathfinder provides a demonstrated structural treatment condition. GitNexus should be assessed separately to determine whether it provides the same capability, a broader one, or a genuinely different semantic/Git-history capability.
+
+**Key distinction:** structural navigation is the capability under test; token/AI-credit reduction is an outcome hypothesis.
+
+
 ## Current experimental conclusions
 
 The experiments so far support the following conclusions:
@@ -290,4 +358,5 @@ The following remain subjects for future investigation:
 * Which of these capabilities are available within the user's existing account tiers and therefore compatible with the zero-cost constraint?
 
 Future experiments should answer these questions with small, controlled tests rather than broad exploratory sessions wherever possible.
+
 
