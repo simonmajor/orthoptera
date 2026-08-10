@@ -1,12 +1,14 @@
 # AI Toolchain Wishlist
 
-This document records capabilities that could improve Orthoptera's AI-assisted development workflow.
+This document records AI/development-tool capabilities that appear useful for Orthoptera but are not currently part of the adopted workflow.
 
-Items here are **wishlist ideas, not commitments**. Inclusion does not imply that a capability should be implemented, that a particular product should be adopted, or that expenditure is justified.
+It is deliberately a **wishlist rather than a roadmap**. An item may remain here indefinitely. Inclusion does not imply that a capability should be implemented, that a particular product should be adopted, or that expenditure is justified.
 
-The primary constraint is the established preference to use existing **zero-cost / account-tier capabilities** where practical. A capability can therefore be worth recording even when it is currently unavailable or would require a paid service.
+The project has an established preference for existing **zero-cost / account-tier capabilities**. A capability may nevertheless be worth recording when it is currently unavailable, requires additional infrastructure, is paid, or has not yet demonstrated sufficient benefit.
 
-Toolchain decisions are recorded in `TOOLCHAIN_DECISIONS.md`. Experimental evidence is recorded in `TOOLCHAIN_EXPERIMENTS.md`.
+The purpose of the wishlist is partly to prevent useful capability ideas from being lost or repeatedly rediscovered.
+
+Toolchain decisions are recorded in `TOOLCHAIN_DECISIONS.md`. Experimental evidence is recorded in `TOOLCHAIN_EXPERIMENTS.md`. The wishlist should not silently become either.
 
 ---
 
@@ -16,7 +18,7 @@ Toolchain decisions are recorded in `TOOLCHAIN_DECISIONS.md`. Experimental evide
 
 **Desired capability:** Give an AI role access to explicitly selected repository roots or directories rather than implicitly exposing everything available in the workspace.
 
-**Why useful:** Different AI roles should be able to receive only the repository material relevant to their task. This would support specialist roles and reduce accidental access to unrelated material.
+**Why useful:** Different AI roles may need access to different parts of the repository. Explicit scoping could reduce accidental access to unrelated material and make specialist roles easier to reason about.
 
 The MCP Filesystem reference implementation demonstrates explicit filesystem roots and read/write capability distinctions.
 
@@ -38,7 +40,7 @@ The MCP Filesystem reference implementation demonstrates explicit filesystem roo
 * multiple related files;
 * filtered results.
 
-**Why useful:** Broad reconnaissance has already demonstrated substantial token consumption. An agent should be able to establish orientation cheaply and progressively retrieve only the material needed for the current question.
+**Why useful:** Broad reconnaissance has demonstrated substantial token and context consumption. An agent should be able to establish orientation cheaply and progressively retrieve only the material needed for the current task.
 
 **Potential benefit:** high.
 
@@ -52,15 +54,55 @@ The MCP Filesystem reference implementation demonstrates explicit filesystem roo
 
 * what changed since a particular revision;
 * recent commits;
-* staged/unstaged changes;
+* staged and unstaged changes;
 * a particular revision;
-* branch state.
+* branch state;
+* focused historical context for a file or change.
 
 **Why useful:** Repository history is often relevant context, but replaying broad history is unnecessary.
 
 **Potential benefit:** medium-high.
 
 **Current status:** demonstrated by the MCP Git reference implementation; not adopted.
+
+---
+
+### Persistent structural repository representation
+
+**Desired capability:** Maintain a persistent representation of repository structure that can be reused between AI sessions rather than repeatedly reconstructing repository relationships from source.
+
+Useful forms may include:
+
+* symbols;
+* imports;
+* callers/callees;
+* dependencies;
+* inheritance;
+* references;
+* impact relationships;
+* execution/process relationships.
+
+**Why useful:** Structural relationships can provide context that is difficult and expensive for an agent to reconstruct repeatedly from raw source.
+
+The GitNexus investigation demonstrated that persistent structural representation can be combined with semantic retrieval and reused across subsequent processes.
+
+**Potential benefit:** high.
+
+**Current status:** capability demonstrated by investigated tooling; adoption not decided.
+
+---
+
+### Persistent hybrid structural and semantic retrieval
+
+**Desired capability:** Combine persistent structural repository knowledge with lexical and/or semantic retrieval so that an agent can discover relevant code through both program relationships and meaning.
+
+**Why useful:** Structural navigation and semantic retrieval answer different questions. Combining them could provide a more effective discovery mechanism than either alone.
+
+The GitNexus investigation demonstrated this capability as a toolchain pattern.
+
+**Potential benefit:** high.
+
+**Current status:** demonstrated capability; Orthoptera-specific cost and productivity benefit not established.
 
 ---
 
@@ -96,7 +138,7 @@ MCP reference implementations explicitly demonstrate these separate concepts.
 
 **Potential benefit:** medium-high.
 
-**Current status:** protocol capability demonstrated; implications for Orthoptera workflow remain under investigation.
+**Current status:** protocol capability demonstrated; implications for the Orthoptera workflow remain under investigation.
 
 ---
 
@@ -114,59 +156,66 @@ MCP resource links provide a concrete example of this pattern.
 
 ---
 
-## Agent safety and role separation
+### Validity-aware persistent project knowledge
 
-### Machine-readable tool safety
+**Desired capability:** Represent durable project knowledge together with enough provenance and validity information to identify knowledge that may have become stale after relevant project changes.
 
-**Desired capability:** Tools should expose whether an operation is:
+Possible mechanisms include:
 
-* read-only;
-* destructive;
-* idempotent;
-* or otherwise consequential.
+* explicit source association;
+* dependency association;
+* validity state;
+* invalidation;
+* review or revalidation;
+* conflict detection.
 
-**Why useful:** Orthoptera may eventually use different AI roles with different authority. Machine-readable capability information could supplement natural-language guardrails.
+**Why useful:** Persistent knowledge is only useful if an agent can distinguish information that remains applicable from information that may have been superseded.
 
-The MCP Filesystem reference implementation demonstrates such annotations.
+The investigations of persistent-memory and assumption-tracking tools have demonstrated several different implementations of this general capability.
+
+**Important constraint:** invalidation based on an associated file or dependency changing is not equivalent to proving that a proposition is false.
 
 **Potential benefit:** medium-high.
 
-**Current status:** demonstrated as an MCP capability; workflow implications unresolved.
+**Current status:** capability class demonstrated by investigated tooling; no Orthoptera-specific benefit established.
 
 ---
 
-### Specialist tool profiles
+## AI workflow and reproducibility
 
-**Desired capability:** Different AI roles should receive different sets of tools and MCP servers according to their responsibilities.
+### Predictable model selection
 
-Examples might eventually include:
+**Desired capability:** Explicitly select and pin the model used for an experiment or workflow.
 
-* architectural/research role;
-* implementation role;
-* local-corpus analysis role;
-* review/verification role.
+**Why useful:** Model selection can affect context limits, behaviour, reproducibility and cost. Controlled experiments should not inadvertently compare different models.
 
-**Why useful:** This could reduce both context overhead and accidental authority.
+The Copilot investigations demonstrated that the active model can be observed and that model selection is available, but the precise implications for all workflows have not been established.
 
-**Potential benefit:** high.
+**Potential benefit:** high for experiments.
 
-**Current status:** strongly aligned with the emerging workflow, but the final role structure remains experimental.
+**Current status:** capability available in investigated tooling; experimental use is desirable.
 
 ---
 
-## Experimental workflow
+### Reproducible / isolated AI sessions
 
-### Bounded AI-credit experiments
+**Desired capability:** Start an AI session with explicitly controlled:
 
-**Desired capability:** Run individual toolchain experiments under an explicit AI-credit ceiling.
+* conversation history;
+* repository state;
+* model;
+* tool configuration;
+* MCP servers;
+* persistent session state;
+* repository-level memory where applicable.
 
-**Why useful:** Broad reconnaissance has already demonstrated that apparently modest requests can produce unexpectedly large model usage.
+**Why useful:** A genuinely controlled experiment requires a way to distinguish fresh conversational context from persistent state and other sources of prior knowledge.
 
-Copilot CLI's `/limits` provides a direct mechanism for this.
+The Copilot investigation established that a fresh conversational session does not necessarily imply absence of persistent repository memory.
 
-**Potential benefit:** high.
+**Potential benefit:** high for experiments.
 
-**Current status:** available and already demonstrated.
+**Current status:** desirable capability; precise experimental controls remain tool-dependent.
 
 ---
 
@@ -194,6 +243,120 @@ Copilot CLI's `/limits` provides a direct mechanism for this.
 
 ---
 
+### Experiment-level usage accounting
+
+**Desired capability:** Attribute AI usage to meaningful units such as:
+
+* parent-agent work;
+* delegated-agent work;
+* tool calls;
+* cached context;
+* reasoning;
+* output.
+
+**Why useful:** This would make it easier to compare alternative AI workflows and understand where resource consumption actually occurs.
+
+**Potential benefit:** high.
+
+**Current status:** partially available through existing tooling; precise accounting relationships remain incompletely established.
+
+---
+
+## Agent organisation and delegation
+
+### Hierarchical agent instructions
+
+**Desired capability:** Share a common baseline of agent instructions while allowing specialist roles to load only the instructions relevant to their task.
+
+**Why useful:** Different AI roles may need different operational guidance. Scoping instructions could reduce unnecessary context while avoiding duplicated or conflicting sources of truth.
+
+The project is separately investigating the appropriate structure of `AGENTS.md` and any subordinate instruction documents.
+
+**Potential benefit:** high.
+
+**Current status:** desirable capability; exact project structure unresolved.
+
+---
+
+### Better subagent control
+
+**Desired capability:** Explicit control over:
+
+* delegated model;
+* delegated context;
+* delegation cost;
+* task scope;
+* returned output size.
+
+**Why useful:** Delegated reconnaissance can be expensive even when the requested result is relatively small. Better control could make delegation more predictable and economical.
+
+**Potential benefit:** high.
+
+**Current status:** capability varies by tool; no preferred implementation established.
+
+---
+
+### Specialist roles with bounded context
+
+**Desired capability:** Delegate a narrowly defined task to an AI role while providing it with only the repository, documentation and other context necessary for that task.
+
+**Why useful:** Specialist roles could isolate expensive exploratory work from the main architectural conversation while avoiding the cost of repeatedly supplying irrelevant project history.
+
+**Potential benefit:** high.
+
+**Current status:** demonstrated as a general workflow pattern; Orthoptera-specific cost/benefit remains an experimental question.
+
+---
+
+### Asynchronous specialist tasks
+
+**Desired capability:** Start an investigation that can continue independently and return a result when complete, rather than keeping the initiating interaction synchronously tied to every intermediate operation.
+
+**Why useful:** Some research and corpus-analysis tasks naturally involve many tool calls and may be better isolated from the main conversational context.
+
+MCP reference implementations demonstrate a task lifecycle supporting this model.
+
+**Potential benefit:** medium.
+
+**Current status:** demonstrated as an MCP capability; no Orthoptera-specific requirement established.
+
+---
+
+## Agent safety and role separation
+
+### Machine-readable tool safety
+
+**Desired capability:** Tools should expose whether an operation is:
+
+* read-only;
+* destructive;
+* idempotent;
+* or otherwise consequential.
+
+**Why useful:** Orthoptera may eventually use different AI roles with different authority. Machine-readable capability information could supplement natural-language guardrails.
+
+The MCP Filesystem reference implementation demonstrates such annotations.
+
+**Potential benefit:** medium-high.
+
+**Current status:** demonstrated as an MCP capability; workflow implications unresolved.
+
+---
+
+### Explicit role/tool authority
+
+**Desired capability:** Define which tools and operations a particular AI role is permitted or expected to use.
+
+**Why useful:** Architectural, implementation, reconnaissance and specialist roles may have different appropriate authorities. Explicit boundaries could reduce accidental modification or unnecessary access.
+
+**Potential benefit:** high.
+
+**Current status:** desirable capability; implementation approach unresolved.
+
+---
+
+## Repository orientation
+
 ### Cheap repository orientation
 
 **Desired capability:** Give an agent a concise, reliable repository orientation without requiring a large exploratory reconnaissance.
@@ -215,36 +378,41 @@ The orientation might establish:
 
 ---
 
-## Long-running and asynchronous work
+### Progressive context acquisition
 
-### Asynchronous specialist tasks
+**Desired capability:** Allow an agent to begin with a small orientation and progressively request additional context as the task requires it.
 
-**Desired capability:** Start an investigation that can continue independently and return a result when complete, rather than keeping the initiating interaction synchronously tied to every intermediate operation.
+**Why useful:** This combines cheap orientation with bounded retrieval. It avoids the false choice between giving an agent the entire repository context and giving it no useful orientation.
 
-**Why useful:** Some research and corpus-analysis tasks naturally involve many tool calls and may be better isolated from the main conversational context.
+The investigated MCP patterns demonstrate several ways of separating discovery from retrieval.
 
-MCP reference implementations demonstrate a task lifecycle supporting this model.
+**Potential benefit:** very high.
 
-**Potential benefit:** medium.
-
-**Current status:** demonstrated as an MCP capability; no Orthoptera-specific requirement established.
+**Current status:** capability demonstrated in principle; Orthoptera workflow not yet established.
 
 ---
 
-## Tooling that is currently out of reach
+## Other useful capabilities
 
-The wishlist deliberately records useful capabilities even when they do not currently justify expenditure.
+### More predictable cost controls
 
-Potential reasons for retaining an item include:
+**Desired capability:** Provide explicit limits or forecasts for AI-resource consumption before or during an expensive task.
 
-* useful capability but paid implementation;
-* useful capability but excessive operational complexity;
-* useful capability but insufficient benefit for a project of Orthoptera's size;
-* useful capability whose value has not yet been demonstrated.
+**Why useful:** Broad reconnaissance has demonstrated that agentic exploration can consume unexpectedly large amounts of model resources.
 
-Such items should not be treated as deficiencies in the current workflow.
+**Potential benefit:** high.
 
-The goal is to avoid rediscovering useful ideas later.
+**Current status:** partially demonstrated by Copilot CLI usage controls; broader applicability remains unresolved.
+
+---
+
+### Additional useful paid capabilities
+
+Potentially useful paid services or features discovered during the project should be recorded here rather than silently becoming workflow assumptions.
+
+Any such capability would need to be evaluated against the project's established zero-cost preference before adoption.
+
+The presence of a paid capability in this document is therefore not a recommendation to purchase it.
 
 ---
 
@@ -257,71 +425,28 @@ A wishlist item should move toward adoption only when there is evidence that it 
 * maintenance burden;
 * security implications;
 * additional background context;
+* operational complexity;
 * and the size and needs of the Orthoptera project.
+
+The distinction between **capability**, **usefulness**, and **adoption** should be preserved:
+
+> A tool may demonstrate a useful capability without establishing that Orthoptera should use that tool.
+
+Likewise, a capability may be desirable in principle without establishing that the project currently needs it.
 
 The default should therefore remain:
 
 > **Prefer the smallest capability that solves the demonstrated problem.**
 
-## Structural repository navigation
-
-Expose repository structure to AI roles through precomputed, queryable relationships rather than requiring those relationships to be reconstructed from raw source.
-
-Relevant capabilities include:
-
-* symbol and definition discovery;
-* callers and callees;
-* imports and dependencies;
-* inheritance and implementation relationships;
-* execution/process relationships;
-* impact analysis;
-* where useful, data-flow relationships.
-
-Structural discovery should preferably support a **discover → fetch** workflow: use compact structural information to identify relevant symbols, files and locations before retrieving source.
-
-This is distinct from lexical repository navigation. Lexical search answers questions such as "where does this text occur?"; structural navigation answers questions such as "what symbol is this, where is it defined, and what depends on it?"
-
 ---
 
-## Persistent hybrid structural + semantic repository retrieval
+## Status
 
-Investigate the capability of maintaining a persistent, queryable repository representation that combines:
+This document is a wishlist, not a roadmap.
 
-* structural program relationships;
-* lexical retrieval;
-* optional semantic/vector retrieval;
-* repository/process/module context;
-* selectively retrievable source.
+Items may remain here indefinitely.
 
-The representation should be reusable across tool invocations and AI sessions, with appropriate mechanisms for detecting repository changes and updating or invalidating stale information.
+An item should move into the adopted workflow only after an explicit decision is made and the relevant project documentation is updated.
 
-The intended workflow is:
-
-```text
-repository
-    ↓
-persistent analysis/index
-    ↓
-lexical + structural + optional semantic retrieval
-    ↓
-relevant symbols / relationships / locations
-    ↓
-targeted source retrieval
-    ↓
-AI context
-```
-
-This should be treated as a capability to investigate, not as a requirement to adopt a particular implementation or product.
-
-The desired properties are:
-
-* persistent reuse rather than reconstruction on every session;
-* structural relationships in addition to text search;
-* optional semantic retrieval rather than assuming all repository questions are lexical or structural;
-* bounded, selectively retrievable results;
-* explicit handling of index freshness;
-* compatibility with ordinary filesystem/source retrieval;
-* measurable behaviour and cost rather than assumed token savings.
-
-Potential benefits such as reduced model context, fewer exploratory turns, lower token consumption or lower AI cost remain hypotheses until measured.
+A wishlist entry should not be treated as an outstanding project task merely because it remains present.
 
