@@ -4,7 +4,9 @@ This document records decisions about how AI tools are used to develop and inves
 
 These decisions concern the **development workflow and AI toolchain**, not the architecture of the Orthoptera software itself.
 
-Experimental observations are recorded in `TOOLCHAIN_EXPERIMENTS.md`. Potential future capabilities are recorded in `TOOLCHAIN_WISHLIST.md`.
+Experimental observations are recorded in `TOOLCHAIN_EXPERIMENTS.md`. Established knowledge derived from those observations is recorded in `TOOLCHAIN_FINDINGS.md`. Potential future capabilities are recorded in `TOOLCHAIN_WISHLIST.md`.
+
+This document is a historical decision record. Each entry records a decision that was actually made, together with the context and rationale available when it was made. Later decisions may refine or supersede earlier ones, but historical decisions should not be silently rewritten or removed merely because later understanding is better.
 
 ---
 
@@ -185,11 +187,11 @@ This distinction is necessary both for reproducibility and to prevent speculativ
 
 ---
 
-## Current status
+## Historical status
 
-These decisions establish the framework for the ongoing AI-toolchain investigation.
+These decisions establish the framework that governed the AI-toolchain investigation at this stage.
 
-They do **not** yet establish:
+They do **not** establish:
 
 * a final three-tier AI architecture;
 * permanent specialist roles;
@@ -198,5 +200,5 @@ They do **not** yet establish:
 * a particular agent framework;
 * or a requirement for any paid service.
 
-Those remain experimental or wishlist subjects until separately decided.
+Those subjects remained experimental or wishlist matters until separately decided.
 
