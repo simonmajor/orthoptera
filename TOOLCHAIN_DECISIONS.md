@@ -1,12 +1,60 @@
-# AI Toolchain Decisions
+# AI Toolchain Decisions Journal
 
-This document records decisions about how AI tools are used to develop and investigate Orthoptera.
+This document is the **historical journal of actual decisions concerning the AI-assisted development workflow and toolchain used to develop and investigate Orthoptera**.
 
-These decisions concern the **development workflow and AI toolchain**, not the architecture of the Orthoptera software itself.
+These decisions concern the development workflow and AI toolchain, not the architecture of the Orthoptera software itself.
 
-Experimental observations are recorded in `TOOLCHAIN_EXPERIMENTS.md`. Established knowledge derived from those observations is recorded in `TOOLCHAIN_FINDINGS.md`. Potential future capabilities are recorded in `TOOLCHAIN_WISHLIST.md`.
+## Journal rules
 
-This document is a historical decision record. Each entry records a decision that was actually made, together with the context and rationale available when it was made. Later decisions may refine or supersede earlier ones, but historical decisions should not be silently rewritten or removed merely because later understanding is better.
+This document is **append-only**.
+
+Only decisions that have actually been made belong here.
+
+Historical decisions should not be rewritten merely because later experience makes their wording less elegant or their rationale more obvious. Later decisions may qualify, supersede or reverse earlier decisions, but the earlier decision remains part of the project's decision history.
+
+This journal must not contain plans for decisions that have not yet been made.
+
+Statements such as:
+
+> This question remains open.
+
+or:
+
+> Further investigation may warrant a later decision.
+
+are historical descriptions of the decision state and are permitted.
+
+Forward-looking proposals, experiment plans and candidate capabilities belong elsewhere.
+
+## What a decision entry should preserve
+
+Where applicable, each decision should record:
+
+* what was decided;
+* when it was decided;
+* the scope of the decision;
+* the alternatives or constraints that mattered;
+* and the rationale.
+
+A decision should not silently promote an experimental observation into a project requirement.
+
+The existence of a tool capability does not by itself constitute a decision to adopt that capability.
+
+## Relationship to the other toolchain records
+
+The toolchain documentation is deliberately divided by function:
+
+* `TOOLCHAIN_EXPERIMENTS.md` — completed experiments and historical evidence;
+* `TOOLCHAIN_FINDINGS.md` — durable findings;
+* `TOOLCHAIN_DECISIONS.md` — actual decisions;
+* `TOOLCHAIN_WISHLIST.md` — candidate capabilities;
+* `TOOLCHAIN_PLANNED_EXPERIMENTS_SEQUENCE.md` — future experiment planning.
+
+The journals are complementary. They should not contain duplicated material merely to make each document independently comprehensive.
+
+## Decisions journal
+
+The decision record follows.
 
 ---
 
@@ -22,7 +70,7 @@ Paid tooling may still be investigated when it provides useful evidence or helps
 
 The zero-cost preference predates Orthoptera. It is therefore a constraint on the toolchain rather than an optimisation introduced in response to a particular experiment.
 
-This also means that discovering a useful capability that is currently unavailable or paid is still worthwhile: it can be recorded for future consideration without becoming a current dependency.
+A useful capability that is currently unavailable or paid may still be recorded for future consideration without becoming a current dependency.
 
 ---
 
@@ -47,15 +95,13 @@ The separation provides a useful boundary between architectural reasoning and im
 
 **Date:** August 2026
 
-The project should document how humans and AI coding agents work together in `CONTRIBUTING.md`, with more detailed toolchain experimentation and decisions kept separately in the `TOOLCHAIN_*.md` documents.
+The project should document how humans and AI coding agents work together in `CONTRIBUTING.md`, with more detailed toolchain experimentation and decisions kept separately in the toolchain documentation.
 
 ### Rationale
 
 The AI workflow has become sufficiently important that leaving it only in conversation history would make the project difficult to reproduce and would encourage future agents to infer rules from incomplete historical context.
 
-`CONTRIBUTING.md` should eventually contain the human-facing workflow and guardrails.
-
-The `TOOLCHAIN_*.md` documents provide a separate research and decision record so that experimental detail does not overwhelm the project's normal contribution guidance.
+The toolchain journals provide a separate research and decision record so that experimental detail does not overwhelm the project's normal contribution guidance.
 
 ---
 
@@ -85,7 +131,7 @@ This became one of the motivations for investigating specialist roles, delegatio
 
 The project should deliberately capture durable findings from AI-toolchain experiments rather than relying on conversation history.
 
-The `TOOLCHAIN_*.md` documents are part of that knowledge-capture mechanism.
+The toolchain journals are part of that knowledge-capture mechanism.
 
 ### Rationale
 
@@ -111,7 +157,7 @@ Knowledge capture should therefore occur at natural checkpoints rather than only
 
 Findings about AI tools, agent behaviour and development workflow should not automatically become requirements or architectural decisions for the Orthoptera software.
 
-Toolchain experiments belong in `TOOLCHAIN_EXPERIMENTS.md`, toolchain decisions belong in this document, and candidate capabilities belong in `TOOLCHAIN_WISHLIST.md`.
+Toolchain experiments belong in the completed-experiment journal, toolchain decisions belong in this journal, and candidate capabilities belong in `TOOLCHAIN_WISHLIST.md`.
 
 ### Rationale
 
@@ -160,8 +206,6 @@ Toolchain experiments that may generate substantial model usage should, where pr
 
 Broad reconnaissance has demonstrated that agentic exploration can consume unexpectedly large amounts of model resources.
 
-Copilot's `/limits` mechanism provides a practical way to prevent an exploratory experiment from becoming unbounded.
-
 The purpose is not to optimise every interaction. It is to make deliberately expensive experiments safe enough to run.
 
 ---
@@ -181,24 +225,39 @@ Agents should not infer undocumented internal behaviour merely because an observ
 
 ### Rationale
 
-The Copilot investigations exposed several layers of behaviour — context, caching, delegation, persistent sessions and subagents — for which the public documentation does not necessarily specify every internal detail.
+The toolchain investigations have exposed several layers of behaviour — context, caching, delegation, persistent sessions and subagents — for which public documentation does not necessarily specify every internal detail.
 
 This distinction is necessary both for reproducibility and to prevent speculative claims from becoming toolchain folklore.
 
 ---
 
-## Historical status
+## Current decision state
 
-These decisions establish the framework that governed the AI-toolchain investigation at this stage.
+These decisions establish the framework for the ongoing AI-toolchain investigation.
 
-They do **not** establish:
+They do not by themselves establish:
 
-* a final three-tier AI architecture;
+* a final number or division of AI tiers;
 * permanent specialist roles;
 * a particular MCP server;
 * an external memory system;
 * a particular agent framework;
+* adoption of a particular repository-navigation or persistent-knowledge tool;
 * or a requirement for any paid service.
 
-Those subjects remained experimental or wishlist matters until separately decided.
+Those matters require separate evidence and, where appropriate, a later decision.
+
+---
+
+## Subsequent decisions
+
+[Existing historical decisions retained unchanged, in chronological order.]
+
+---
+
+## Decisions journal maintenance
+
+New decisions are appended to the bottom of this document.
+
+Do not rewrite earlier decisions into a current-state summary. If a later decision supersedes an earlier one, append the later decision and explicitly state the relationship where useful.
 
