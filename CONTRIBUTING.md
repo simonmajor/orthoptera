@@ -17,7 +17,7 @@ Read `AGENTS.md` first.
 `AGENTS.md` identifies the other project documents that should be consulted according to the significance and nature of the task. In particular:
 
 * `DESIGN.md` describes the intended architecture and scientific approach.
-* `ROADMAP.md` describes current and planned work.
+* `ROADMAP.md` describes current priorities and planned work.
 * `DECISIONS.md` records important architectural and methodological decisions and their rationale.
 * `EXPERIMENTS.md` records exploratory work and empirical observations.
 * `CONTRIBUTING.md` describes the development and AI-collaboration workflow.
@@ -135,6 +135,49 @@ Do not rewrite history merely to make the current documentation look cleaner.
 
 Where a document has a historical or journal-like role, additions should preserve the chronology and provenance of the underlying record. If material needs to be reorganised into a different kind of document, recover and preserve the information first; structural reorganisation should not be allowed to become accidental information loss.
 
+### Documentation preservation invariants
+
+The following invariants apply whenever documentation is being reorganised, redrafted, recovered, extracted, consolidated or otherwise transformed.
+
+**Historical-preservation invariant:** A documentation transformation MUST NOT discard historical information merely because that information is redundant, superseded, obsolete, implicit elsewhere, or no longer considered important.
+
+**Evidence-preservation invariant:** Observations, measurements, negative results, limitations, unresolved questions and other evidence-bearing material MUST NOT be discarded merely because a later interpretation appears to make them unnecessary.
+
+**Provenance-preservation invariant:** References needed to identify, locate or recover the underlying evidence MUST be preserved unless their deliberate removal is explicitly part of the change.
+
+**Interpretation-preservation invariant:** When a later understanding changes the interpretation of earlier material, the earlier observation and the fact that its interpretation changed MUST remain recoverable.
+
+**Journal invariant:** A document whose purpose is to act as a historical journal is a record of what happened, not merely a representation of current understanding. Its historical entries MUST NOT be rewritten into a current-state summary.
+
+**Restructuring invariant:** Moving, separating, combining or reclassifying documentation MUST preserve the information content of the source. Reorganisation is not permission to summarise away material.
+
+**No implicit deletion invariant:** Material MUST NOT be considered safe to delete merely because it can be reconstructed from another document, from Git history, or from an earlier conversation. If it is useful knowledge in the document being transformed, preserve it unless deliberate deletion is part of the task.
+
+**Planning-separation invariant:** Historical journals record completed or past work. Forward-looking planning belongs in an appropriate planning document. A historical journal MUST NOT be used as an evolving task list.
+
+**Uncertainty invariant:** Uncertainty is information. An unresolved question, tentative interpretation or explicit statement that something was not established MUST NOT be silently converted into a stronger conclusion or removed for the sake of concision.
+
+**Checkpoint invariant:** A documentation checkpoint is a knowledge-preservation operation, not an invitation to produce a polished summary. The purpose of a checkpoint is to leave durable information in the repository that would otherwise be difficult or expensive to reconstruct.
+
+### Recovery and restructuring
+
+During a deliberate documentation-recovery exercise, the preservation invariants above apply even though the existing documents themselves may necessarily be modified.
+
+The recovery process may therefore:
+
+* restore material that was previously lost from the current representation;
+* separate historical material from planning material;
+* establish journal conventions;
+* move material between documents;
+* repair provenance;
+* or otherwise change the structure of the documentation.
+
+Such changes MUST preserve the historical information being recovered.
+
+The recovery exercise itself is not the final documentation review. Once the recovery and structural work is complete, a separate second pass should review the resulting documentation as a whole for consistency, cross-references, naming, duplication, misplaced material and any remaining knowledge loss.
+
+That second pass MUST NOT be used as justification for silently removing historical material during the recovery steps.
+
 ## 7. Distinguish evidence from inference
 
 Documentation concerning experiments, tools and AI behaviour should distinguish at least the following:
@@ -227,6 +270,10 @@ For example:
 >
 > Run the relevant tests and report the result.
 
+This is generally preferable to asking an agent to "improve" a subsystem without defining the intended behaviour.
+
+For a historical or archaeological task, tell the agent explicitly whether the material is evidence to document rather than code to modernise.
+
 ## 12. Review and commit discipline
 
 Before committing a documentation or implementation change:
@@ -239,6 +286,3 @@ Before committing a documentation or implementation change:
 * and confirm that the resulting document remains consistent with the repository's documentation hierarchy.
 
 Prefer one logical change per commit.
-
-When a larger documentation recovery or reorganisation is required, separate the work into independently understandable commits so that the evolution of the documentation remains recoverable from git history.
-
