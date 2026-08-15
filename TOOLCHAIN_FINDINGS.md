@@ -553,3 +553,224 @@ In particular:
 
 The same principle applies in the other direction: semantic retrieval should not be treated as structural understanding, and persistent state should not be treated as evidence of automatic memory or retrieval.
 
+
+---
+
+## Recovery entry — persistent knowledge refinement from KiroGraph and Nella
+
+**Underlying investigations:** 9 August 2026
+**Recovered into findings journal:** 15 August 2026
+
+The KiroGraph and Nella investigations refined the earlier generic concept of **persistent repository representation / knowledge**.
+
+The durable distinction is that persistence can apply to fundamentally different kinds of state.
+
+### Persistent knowledge should distinguish 4A, 4B and 4C
+
+The useful vocabulary is:
+
+```text
+Level 4A — persistent structural representation
+           source-derived structural graph/index survives sessions
+
+Level 4B — persistent semantic representation
+           semantic/vector retrieval representation survives sessions
+
+Level 4C — persistent project/agent knowledge
+           agent- or human-generated knowledge survives independently
+           of reconstructing it from source
+```
+
+These are **persistence categories**, not progressively stronger retrieval levels.
+
+They can coexist with the existing retrieval distinction:
+
+```text
+Level 1 — lexical repository navigation
+Level 2 — structural repository navigation
+Level 3 — semantic repository retrieval
+```
+
+A system may therefore combine, for example, Level-2 structural navigation with Level-4A persistence, or Level-3 semantic retrieval with Level-4B persistence.
+
+Level 4C is importantly different from both.
+
+A persistent source-derived index answers questions such as:
+
+> What structure or semantic representation can be reconstructed once and reused?
+
+Persistent project/agent knowledge answers a different question:
+
+> What has an agent or human learned, decided or recorded that should survive independently of reconstructing it from repository source?
+
+This distinction should remain explicit in future toolchain analysis.
+
+### KiroGraph established the investigated Level-4C capability
+
+The implementation investigated at:
+
+`https://github.com/davide-desio-eleva/kirograph`
+
+demonstrated all three persistence categories.
+
+Its source-derived repository graph demonstrated Level 4A.
+
+Its optional persistent vector representation demonstrated Level 4B.
+
+Most importantly for the development of Orthoptera's capability vocabulary, its persistent memory/project-knowledge facilities demonstrated Level 4C concepts including:
+
+* cross-session observations;
+* decisions;
+* errors;
+* patterns;
+* links between project knowledge and source symbols;
+* typed knowledge relationships such as supersession, conflict and compatibility;
+* stale/review mechanisms;
+* context reconstruction;
+* persistent wiki/project knowledge.
+
+The durable finding is therefore:
+
+> **Persistent project/agent knowledge is a distinct toolchain capability from persistent repository indexing.**
+
+KiroGraph supplied a concrete implementation of that distinction.
+
+This was the genuinely new capability boundary relative to the preceding GitNexus investigation.
+
+GitNexus had already demonstrated a persistent source-derived structural and semantic repository representation.
+
+KiroGraph showed that an agent-facing system can additionally persist **knowledge produced through project work**, rather than only representations reconstructed from source.
+
+### Persistent knowledge does not establish useful memory automatically
+
+Persistence alone remains insufficient.
+
+A useful Level-4C system must also address questions such as:
+
+* whether the relevant knowledge is retrieved at the right time;
+* whether knowledge remains current;
+* how conflicting knowledge is represented;
+* how source associations are maintained;
+* how obsolete knowledge is reviewed or invalidated;
+* whether retrieval is selective enough to avoid replacing source-context overload with memory-context overload.
+
+Therefore:
+
+> **Persistent project knowledge is a demonstrated capability; useful, correct and efficient cross-session memory remains an empirical property.**
+
+No KiroGraph investigation established an Orthoptera-level reduction in tokens, AI credits, model turns or total cost.
+
+The distinct experiment implied by the capability is whether a later agent session can retrieve deliberately persisted project knowledge more effectively than rediscovering the same knowledge from repository-derived context.
+
+The cost of **creating** persistent knowledge must be included when evaluating any later retrieval benefit.
+
+### Nella refined Level 4C without extending its capability boundary
+
+The implementation investigated at:
+
+`https://github.com/nella-labs/nella`
+
+demonstrated a narrower persistent-knowledge model centred on explicit agent assumptions.
+
+A Nella assumption can carry state including:
+
+* a proposition/description;
+* a type;
+* confidence;
+* explicit related files or path/glob patterns;
+* validity;
+* invalidation metadata.
+
+Persistent assumption state survives process boundaries and can be retrieved through agent-facing context operations.
+
+Nella can invalidate assumptions when declared related source paths change and can also react to relevant package/dependency snapshot drift.
+
+This establishes a useful implementation pattern:
+
+```text
+persistent proposition
+        +
+declared dependencies
+        +
+explicit validity state
+        +
+change-triggered invalidation
+```
+
+The durable qualification is equally important:
+
+> **Nella detects conditions under which an assumption should no longer be trusted; it does not determine semantically whether the proposition has become false.**
+
+Its primary source relationships are explicit files/paths/globs rather than automatically inferred semantic dependencies.
+
+A change elsewhere in a transitive behavioural dependency therefore need not invalidate an assumption unless that dependency was represented appropriately.
+
+Revalidation likewise changes validity state; it does not independently prove the proposition true.
+
+The correct capability classification is therefore:
+
+> **Validity-aware / dependency-invalidated project knowledge is a specialised Level-4C mechanism, not a new capability boundary beyond persistent project/agent knowledge.**
+
+### KiroGraph versus Nella
+
+The durable comparison is:
+
+```text
+KiroGraph
+    broad persistent project knowledge
+    +
+    symbol/structural association
+    +
+    conflict/staleness relationships
+    +
+    review/context reconstruction
+
+Nella
+    explicit typed assumptions
+    +
+    confidence
+    +
+    boolean validity
+    +
+    file/glob dependencies
+    +
+    direct invalidation
+```
+
+Nella's assumption lifecycle is explicit and potentially operationally useful.
+
+KiroGraph's established Level-4C model is broader.
+
+The investigations did not demonstrate that Nella's narrower mechanism provides a better stale-knowledge outcome.
+
+Accordingly:
+
+> **Nella does not currently add a genuinely new Orthoptera capability beyond the KiroGraph baseline.**
+
+A Nella-vs-KiroGraph stale-knowledge comparison remains a possible implementation-level experiment within Level 4C, not a test of a new capability class.
+
+### Qualified implementation possibility
+
+Nella source also contained a richer SQLite-backed cross-agent context-sharing subsystem with concepts including versioning, expiry/TTL, visibility, optimistic concurrency, channels and cross-workspace state.
+
+This was an intriguing implementation direction.
+
+However, the investigation did **not** establish that this richer context manager was exposed through the principal agent-facing MCP workflow examined.
+
+It must therefore remain classified as:
+
+> **implemented internally, potentially interesting if exposed, but not demonstrated as an available agent capability.**
+
+No additional investigation of that exposure was considered justified.
+
+### General finding
+
+The combined KiroGraph/Nella result strengthens a broader rule:
+
+> **Persistent state, persistent repository representation, persistent semantic retrieval and persistent project knowledge must not be treated as synonyms.**
+
+And within persistent project knowledge:
+
+> **Storage, retrieval, source association, conflict handling, invalidation and semantic truth are separate properties that should be demonstrated independently.**
+
+No adoption decision follows from these findings.
