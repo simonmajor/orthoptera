@@ -960,3 +960,209 @@ Where a statement is explicitly described as an observation, it should be treate
 Where behaviour is described as unresolved, inferred or hypothetical, it should not be promoted into project policy without further evidence or an explicit decision.
 
 Historical experiment material is retained because later investigations may change the interpretation of an earlier observation without making that observation itself worthless.
+---
+
+## Recovery entry — focused MCP Filesystem and Tier-1 file-search investigations
+
+**Investigation date:** 9 August 2026
+**Recovered into journal:** 15 August 2026
+**Primary implementation:** official MCP Filesystem reference server, `modelcontextprotocol/servers`, `src/filesystem`
+**Related source:** CoreStory article on MCP servers for codebase context, specifically its Tier-1 file-search capability
+
+This recovery entry preserves two focused investigations carried out after the broader MCP reference-implementation survey:
+
+1. a source-first investigation of the official MCP Filesystem reference server as a capability/reference implementation;
+2. a follow-up investigation of the CoreStory article's Tier-1 "file search" category, traced to the official Filesystem implementation rather than treating the article itself as implementation evidence.
+
+The investigations did **not** establish that the Filesystem server should be adopted by Orthoptera. Their value was to make several earlier MCP conclusions more precise.
+
+### Scoped filesystem access and dynamic Roots
+
+The Filesystem implementation maintains an explicit allowed-directory set and validates filesystem operations against it, including normalised paths and resolved symlink targets.
+
+This demonstrates a stronger mechanism than merely instructing an agent to inspect only selected directories:
+
+> **The workspace exposed by a tool can be constrained mechanically, independently of the agent's natural-language instructions.**
+
+MCP Roots can also supply and subsequently change the roots exposed to the server during a session. This demonstrates **dynamic/runtime scope selection**.
+
+Important qualifications:
+
+* MCP Roots communicate scope; the server must enforce it.
+* Roots are not themselves an operating-system sandbox.
+* In the reference implementation, client-provided Roots replace the CLI-configured allowed-directory set rather than necessarily being intersected with it.
+* The appropriate scope-composition semantics for an Orthoptera specialist workflow remain unresolved.
+* Restricting the available search space does not by itself demonstrate lower model-token or AI-credit consumption.
+
+The useful distinction is between **declared scope**, **tool-enforced scope**, and **environment-enforced authority**.
+
+### Tool safety annotations are metadata, not authority
+
+The Filesystem server annotates tools with MCP safety metadata such as `readOnlyHint`, `destructiveHint` and `idempotentHint`.
+
+The investigation established three distinct layers:
+
+```text
+machine-readable tool semantics
+        ↓
+client/workflow policy
+        ↓
+technical enforcement
+```
+
+A read-only annotation can describe a tool to a client. A client may use that metadata when constructing a role or confirmation policy. Neither fact proves that the underlying process is technically unable to modify the workspace.
+
+Actual read-only authority requires an enforcement mechanism such as filesystem permissions, a read-only mount, a restricted server surface, or another environment-level boundary.
+
+The useful Orthoptera capability is therefore **machine-readable safety/behaviour metadata**, not the stronger claim that MCP annotations make an agent safe.
+
+### Discovery and retrieval are separate operations
+
+The implementation exposes separate operations for directory listing, recursive tree discovery, file/path search, metadata inspection, file reading and multi-file reading.
+
+`search_files` returns matching paths rather than file contents.
+
+This establishes a progressive-disclosure pattern:
+
+```text
+scope
+  ↓
+discover structure / candidate paths
+  ↓
+inspect metadata where useful
+  ↓
+select
+  ↓
+retrieve content
+```
+
+For Orthoptera, the important mechanism is:
+
+> **Make orientation and selection cheap, then make source retrieval an explicit subsequent step.**
+
+This is a more precise formulation of bounded/progressive repository retrieval than merely instructing an agent to read less.
+
+### "Bounded retrieval" is not necessarily hard-bounded context
+
+The implementation supports `head` and `tail` line-limited reads, which are useful progressive-inspection primitives.
+
+However:
+
+* the limit is expressed in lines rather than bytes or model tokens;
+* a single very long line can still return a large payload;
+* full-file reads remain available;
+* multi-file retrieval has no demonstrated aggregate output ceiling;
+* recursive directory trees and path searches can themselves return large result sets.
+
+The implementation's internal I/O chunk size is not a model-context limit.
+
+Therefore:
+
+> **Retrieval can be semantically bounded without model context being hard-bounded.**
+
+### Batching and orientation operations can themselves create large outputs
+
+`read_multiple_files` can deliberately retrieve a coherent group such as an implementation, test and relevant documentation in one call.
+
+This may reduce tool-call overhead, but the implementation does not demonstrate a maximum file count or combined output size. Batching can therefore create a large context payload.
+
+Likewise, shallow directory listings, file metadata and recursive trees allow orientation without reading source, but a recursive tree is not inherently small and has no demonstrated general depth or output-size bound.
+
+These are useful retrieval primitives, not demonstrated token-saving mechanisms.
+
+### Tier-1 "file search" is path discovery, not semantic or content search
+
+The CoreStory follow-up investigation traced the article's Tier-1 capability to the official Filesystem implementation.
+
+`search_files` is fundamentally a **path/glob search**. It does not provide:
+
+* repository-content search comparable to `rg`;
+* embeddings or vector retrieval;
+* AST-aware search;
+* semantic ranking;
+* natural-language relevance;
+* persistent code intelligence.
+
+Ordinary shell tools such as `find`, `rg`, directory listings and Git/GitHub search can provide the same broad class of lexical/path discovery, and often stronger content search.
+
+The useful MCP distinction is therefore not:
+
+> MCP supplies a better search engine.
+
+It is:
+
+> **MCP supplies a constrained, explicit, agent-callable interface to filesystem discovery and retrieval primitives.**
+
+For an agent that already has competent shell access, no evidence was found that the MCP Filesystem search itself is intrinsically more capable or more efficient.
+
+### No persistent index or repeated-scan solution
+
+The Filesystem server performs filesystem traversal when searching. The investigation found no persistent content index, AST index, embedding/vector index, repository graph or cross-session repository knowledge.
+
+It therefore does **not** solve the repeated-repository-scanning problem.
+
+A host or client may cache results, but that would be a host/client capability rather than one demonstrated by this server.
+
+### Context/token/cost conclusion
+
+Taken together, the focused investigations refined Tier 1 into:
+
+```text
+explicit scope
+      ↓
+discover paths / structure
+      ↓
+select candidates
+      ↓
+retrieve selected content
+```
+
+This is a useful **context-acquisition discipline**. It should not be conflated with semantic repository retrieval or persistent structural code intelligence.
+
+The mechanism makes lower model-side context consumption plausible when it prevents irrelevant source from being retrieved.
+
+No apples-to-apples evidence was found establishing that the MCP Filesystem workflow produces, relative to disciplined shell/filesystem use:
+
+* fewer cumulative input tokens;
+* fewer cached tokens;
+* fewer output tokens;
+* fewer model turns;
+* lower AI credits;
+* lower monetary cost;
+* or better task correctness.
+
+The appropriate conclusion was:
+
+> **Context-disciplined retrieval mechanism demonstrated; token/cost benefit not demonstrated.**
+
+### Relationship to the earlier MCP survey
+
+The broad MCP reference survey remains valid, but these focused investigations add important qualifications:
+
+1. scoped access can be dynamic at runtime through Roots, but scope-composition semantics are implementation-specific;
+2. safety annotations are advisory metadata, not technical authority;
+3. bounded retrieval is not necessarily hard-bounded model context;
+4. search-first retrieval can avoid unnecessary source reads, but `search_files` searches paths rather than source content;
+5. multi-file and recursive-tree operations can themselves produce large outputs;
+6. Tier-1 Filesystem MCP does not provide persistent indexing or semantic repository understanding;
+7. MCP's value here is principally the constrained agent-tool interface and retrieval workflow, not superior search intelligence.
+
+### Contemporary implications
+
+The focused investigations did not justify a new top-level experiment on the Filesystem server itself.
+
+They strengthened existing capability ideas around scoped access, possible dynamic/runtime scope selection, discover-then-fetch retrieval, progressive inspection, specialist tool/workspace boundaries and machine-readable safety metadata.
+
+They also established that future context-efficiency claims must measure downstream model behaviour rather than infer savings from small individual tool responses.
+
+### Provenance
+
+Primary implementation reference:
+
+`https://github.com/modelcontextprotocol/servers/tree/main/src/filesystem`
+
+Related article investigated:
+
+`https://corestory.ai/post/mcp-servers-codebase-context-ai-coding-agents`
+
+The article motivated the Tier taxonomy; implementation claims were checked against the official Filesystem server rather than accepted from the article alone.
