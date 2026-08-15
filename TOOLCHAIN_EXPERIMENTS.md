@@ -1591,3 +1591,719 @@ It was:
 > **GitNexus established persistent structural + semantic repository representation; KiroGraph extended the investigated capability model into persistent agent/project knowledge.**
 
 No adoption decision followed.
+
+---
+
+## Recovery entry — Nella investigation and subsequent refinements
+
+**Investigation date:** 9 August 2026
+**Recovered into journal:** 15 August 2026
+**Candidate:** `nella-labs/nella`
+**Upstream examined:** `main`
+**Latest release identified during the investigation:** `v0.2.7`, commit `d4743bf`, released 6 April 2026
+
+Nella was investigated source-first after KiroGraph, explicitly using the KiroGraph persistent-project-knowledge result as the comparison baseline.
+
+The investigation developed through three stages:
+
+1. an initial source-first capability investigation;
+2. a refinement that challenged whether Nella's validity-aware assumptions constituted a genuinely new Level-4C capability;
+3. an adversarial second pass comparing the refined conclusion against KiroGraph's established memory, staleness and conflict mechanisms.
+
+The historical progression matters because the first interpretation was progressively weakened by the later comparisons.
+
+### First-pass headline
+
+The initial investigation concluded that Nella was **not a fundamentally new repository-navigation technology** relative to GitNexus and KiroGraph.
+
+Its repository-understanding layer combined mechanisms including:
+
+* AST-aware chunking;
+* BM25 lexical search;
+* vector retrieval;
+* Reciprocal Rank Fusion;
+* optional neural reranking;
+* persisted semantic/index artefacts;
+* dependency tracking;
+* MCP access.
+
+Those capabilities largely occupied capability territory already established by GitNexus and KiroGraph.
+
+The initially distinctive feature appeared to be elsewhere:
+
+> **persistent, typed agent assumptions associated with source files and automatically invalidated when those declared files changed.**
+
+The first pass therefore treated Nella's assumption lifecycle as a potentially distinctive implementation of persistent project knowledge and considered a narrowly targeted stale-knowledge experiment justified.
+
+### Nella implementation character
+
+Nella was found to be a TypeScript/Node.js codebase-intelligence layer intended to sit between coding agents and repositories.
+
+The investigated monorepo contained packages for:
+
+* indexing, retrieval and context;
+* MCP/CLI integration;
+* API/WebSocket access;
+* benchmarking/evaluation.
+
+Its repository-understanding architecture was approximately:
+
+```text
+repository
+    ↓
+code chunks
+    ↓
+lexical + vector indexes
+    ↓
+hybrid retrieval
+    ↓
+optional reranking
+    ↓
+MCP / CLI / API
+```
+
+Alongside that retrieval path was persistent project/session state containing assumptions, changes and dependency information.
+
+### Structural limitations for Orthoptera
+
+The first pass found that Nella's structural representation was materially narrower than Code Pathfinder, GitNexus or KiroGraph.
+
+The AST-specific chunking path used TypeScript/JavaScript parsing and attempted to align chunks with meaningful code units such as functions, classes and interfaces.
+
+Python was supported for retrieval, but equivalent Python-specific structural extraction was not demonstrated.
+
+The investigated representation supported concepts including:
+
+* files;
+* code chunks;
+* symbols defined by chunks;
+* imports/dependencies;
+* architecture/file dependency relationships.
+
+It did **not** demonstrate a rich Python program graph containing the established structural-tool capabilities such as:
+
+* caller/callee relationships;
+* comprehensive symbol-reference relationships;
+* inheritance/implementation traversal;
+* general control-flow;
+* general data-flow;
+* taint analysis.
+
+The first-pass classification was therefore:
+
+> **Level 2 structural navigation: partial and materially weaker for Orthoptera than the structural tools already investigated.**
+
+Nella's relevance to Orthoptera was consequently not primarily better Python structural analysis.
+
+### Semantic retrieval
+
+Nella did demonstrate a genuine hybrid retrieval implementation.
+
+The investigated search path combined:
+
+```text
+semantic vector retrieval
+        +
+BM25 lexical retrieval
+        ↓
+weighted Reciprocal Rank Fusion
+        ↓
+optional neural reranking
+```
+
+The implementation used explicit lexical/vector weighting and RRF parameters and could expose component scores, combined scores, reranking results and confidence/suggestion information to an agent.
+
+This supported the classification:
+
+> **Level 3 semantic retrieval: demonstrated.**
+
+Unlike KiroGraph, where the investigation did not establish RRF specifically, Nella's RRF mechanism was directly demonstrated.
+
+This did not establish a new Orthoptera capability because GitNexus had already demonstrated hybrid semantic retrieval.
+
+### Persistent semantic representation
+
+Nella persisted its vector/index representation to disk and could reload it across runs.
+
+This established:
+
+> **Level 4B persistent semantic representation: demonstrated.**
+
+Again, this capability was already within the GitNexus/KiroGraph baseline.
+
+### Persistent assumptions
+
+The first-pass investigation found a concrete persistent assumption model.
+
+An assumption contained information including:
+
+* description;
+* type;
+* related files;
+* confidence;
+* validity;
+* creation state;
+* invalidation metadata.
+
+Assumption types included categories such as:
+
+* schema;
+* interface;
+* dependency;
+* behaviour;
+* configuration;
+* structure;
+* other.
+
+Persistent session state was stored under:
+
+```text
+.nella/session.json
+```
+
+and reloaded across process invocations.
+
+This demonstrated genuine cross-process persistence rather than an in-memory conversational cache.
+
+### File/path-linked invalidation
+
+The assumption mechanism associated assumptions with explicit source paths or glob patterns.
+
+When files changed, Nella compared the changed paths with those declared relationships and could mark matching assumptions invalid, recording information such as the invalidating run and reason.
+
+The first-pass conceptual lifecycle was:
+
+```text
+agent establishes assumption
+        ↓
+assumption persisted
+        ↓
+declared related source changes
+        ↓
+assumption invalidated
+        ↓
+future agent can be warned
+        ↓
+fact should be re-established
+```
+
+This mechanism was real implementation evidence rather than merely a product claim.
+
+### Dependency snapshots
+
+Nella also persisted package/dependency state and could compare later dependency snapshots against earlier state.
+
+Changes to package manifests or lockfile-derived dependency state could contribute to assumption invalidation.
+
+This broadened the invalidation mechanism beyond simple source-path modification, but it did not amount to semantic program-dependency analysis.
+
+### Change ledger
+
+Nella maintained persistent records of project changes containing information such as:
+
+* run identity;
+* file;
+* operation;
+* reason;
+* explicit dependencies;
+* related assumptions;
+* optional hashes.
+
+Recorded `dependsOn` relationships could be traversed to support impact reasoning over the **recorded change history**.
+
+An important qualification emerged even in the first pass:
+
+> **The change ledger is a graph of recorded change relationships, not an automatically inferred source-program dependency graph.**
+
+It therefore should not receive credit for caller/callee or semantic source-dependency analysis.
+
+### Agent-facing context retrieval
+
+The persistent state was not merely stored.
+
+The normal context path could expose information including:
+
+* valid assumptions;
+* recent invalidations;
+* recent changes;
+* dependency snapshots;
+* session statistics.
+
+The MCP surface also included assumption/context operations, including mechanisms to check assumptions explicitly.
+
+Later refinement established that invalidated assumptions were surfaced more operationally than initially credited: recently invalidated assumptions could appear in context, and explicit assumption checks could signal an error state when invalid assumptions were present.
+
+Therefore:
+
+> **Persistent assumption state and explicit agent-facing retrieval of invalidated state were demonstrated.**
+
+What remained unestablished was automatic injection of the right persistent knowledge into every future agent interaction without an appropriate context/tool invocation.
+
+### Multi-agent coordination
+
+The investigated source also included multi-agent facilities such as:
+
+* agent registration;
+* heartbeats/presence;
+* task creation and claiming;
+* task dependencies;
+* decision recording/retrieval;
+* file-conflict checking.
+
+These were concrete facilities, but no evidence established that they provided an Orthoptera advantage over the existing Architectural-AI / implementation-AI workflow.
+
+They were therefore not promoted to a new Orthoptera capability.
+
+### Local versus external computation
+
+The MCP server and repository-facing components could operate locally, and local vector-index implementations existed.
+
+However, semantic indexing/reranking was not inherently fully local.
+
+The investigated implementation included external embedding/reranking service paths.
+
+The appropriate conclusion was:
+
+> **Nella can be locally hosted, but its semantic retrieval path is not necessarily locally computed.**
+
+That distinction mattered to Orthoptera's preference for existing-tier or local capabilities where practical.
+
+### First-pass context/cost conclusion
+
+Nella demonstrated mechanisms that could plausibly reduce repository material supplied to the coding model:
+
+* bounded top-K retrieval;
+* lexical/vector ranking;
+* filtering;
+* code chunks rather than complete files;
+* persistent indexes;
+* persistent assumptions and changes.
+
+But semantic retrieval itself can impose embedding and reranking costs.
+
+No Orthoptera experiment established that Nella reduced:
+
+* cumulative model input;
+* cached input;
+* output tokens;
+* turns;
+* AI credits;
+* monetary cost;
+* or total task time.
+
+The first-pass conclusion therefore retained the existing methodological separation:
+
+> **Mechanisms demonstrated; Orthoptera token/cost benefit not demonstrated.**
+
+### First-pass experiment proposal
+
+The initial experiment proposal focused on the apparently distinctive property rather than generic semantic retrieval.
+
+The proposed question was:
+
+> **Can source-linked assumptions that automatically invalidate after repository changes prevent a fresh agent from relying on stale project knowledge?**
+
+The intended treatment compared persistent assumptions against ordinary cross-session rediscovery, with correctness and stale-knowledge avoidance as primary concerns and token/cost measures as secondary outcomes.
+
+At this stage, Nella's assumption mechanism was still being treated somewhat generously as a potentially distinctive Level-4C capability.
+
+### First refinement — validity-aware assumptions are not a new capability boundary
+
+The first-pass interpretation was subsequently challenged directly against KiroGraph's established Level-4C baseline.
+
+The revised conclusion was more conservative:
+
+> **Nella implements a specialised form of persistent project/agent knowledge with explicit dependency-based invalidation; it does not establish a new persistent-knowledge capability level beyond KiroGraph.**
+
+KiroGraph already demonstrated broad persistent project knowledge, source association, stale/conflict mechanisms and cross-session retrieval.
+
+Nella's model was narrower and more explicit:
+
+```text
+assumption
+    +
+declared file/path dependencies
+    +
+confidence
+    +
+validity state
+    +
+invalidation metadata
+```
+
+The distinguishing question therefore changed from:
+
+> Does Nella introduce a new type of persistent knowledge?
+
+to:
+
+> **Does Nella's explicit assumption/invalidation lifecycle produce a materially better stale-knowledge outcome than KiroGraph's existing Level-4C mechanisms?**
+
+The available implementation evidence could not answer yes.
+
+### Invalidation is dependency-change detection, not semantic truth maintenance
+
+The refinement identified a crucial distinction.
+
+Nella demonstrably knows when an explicitly declared related path changes.
+
+It does **not** thereby know whether the proposition represented by the assumption has become false.
+
+The mechanism is approximately:
+
+```text
+assumption
+    ↓
+declared related paths/globs
+    ↓
+matching change
+    ↓
+mark assumption invalid
+```
+
+It is not:
+
+```text
+assumption proposition
+    ↓
+infer complete semantic dependencies
+    ↓
+analyse changed program behaviour
+    ↓
+determine whether proposition remains true
+```
+
+This substantially weakened the phrase "stale-knowledge prevention".
+
+The more accurate description became:
+
+> **dependency-triggered invalidation of potentially stale assumptions.**
+
+### File-level rather than symbol-level dependency
+
+`relatedFiles` represented paths/globs.
+
+No evidence established:
+
+* symbol-linked assumptions;
+* automatically inferred transitive semantic dependencies;
+* graph-derived dependency attachment.
+
+This creates a possible false-negative invalidation case: an assumption can depend indirectly on another file that changes without any declared related path changing.
+
+The mechanism can also invalidate a whole assumption when any declared related file changes; no partial-proposition validity model was demonstrated.
+
+### Revalidation is state management
+
+Nella exposed mechanisms for revalidation.
+
+The implementation did not independently prove that a revalidated proposition was true.
+
+A particularly revealing implementation detail was that clearing invalidated assumptions could revalidate them as a workaround rather than semantically re-establish their propositions.
+
+This reinforced the conclusion:
+
+> **The mechanism manages trust/validity state; it is not a truth-maintenance system.**
+
+### Revised experiment implication
+
+The original Nella-versus-filesystem experiment was therefore no longer clean.
+
+Such a comparison would mostly test whether persistent knowledge can be useful, which KiroGraph had already established as the relevant capability class.
+
+The smallest defensible Nella-specific experiment became:
+
+> **Nella versus KiroGraph on one controlled stale-knowledge invalidation case.**
+
+Primary questions:
+
+1. Was the old knowledge surfaced as stale?
+2. Did the agent nevertheless use it?
+3. Was the resulting answer correct?
+4. How much additional interaction was required?
+
+A larger token/cost benchmark would only be justified if the narrow mechanism comparison first demonstrated a meaningful operational difference.
+
+### Adversarial second pass — challenge against the full KiroGraph baseline
+
+A further adversarial refinement deliberately attempted to falsify the conservative conclusion by looking for Nella mechanisms that KiroGraph did not already provide.
+
+The pass strengthened several implementation findings but did **not** establish a new Orthoptera capability boundary.
+
+### Assumption retrieval was more operationally complete than initially credited
+
+The second pass confirmed that invalidated state was explicitly surfaced through the normal agent-facing context machinery.
+
+The context path could return both active assumptions and recent invalidations.
+
+Explicit assumption-checking operations could also return invalid assumptions in a form intended to stop or warn agent activity.
+
+So an earlier qualification that persistence might exist without meaningful retrieval had been too cautious.
+
+The corrected result was:
+
+> **Cross-session assumption state is persistently stored and explicitly retrievable through agent-facing context operations.**
+
+Still not demonstrated:
+
+> **Every relevant future task automatically receives the appropriate assumption before the agent acts.**
+
+That remains dependent on actual host/tool workflow.
+
+### Invalidation surface broader than source-path changes alone
+
+The adversarial pass also retained the dependency-snapshot mechanism.
+
+The complete demonstrated invalidation surface included approximately:
+
+```text
+declared source/path changes
+        +
+package/dependency snapshot drift
+        ↓
+affected assumptions
+        ↓
+invalid state
+```
+
+This is broader than file changes alone.
+
+It remains much narrower than automatically inferred semantic source dependencies.
+
+### Preflight assumption conflict checking
+
+Nella could compare planned file changes with relevant assumptions and generate warnings/errors based on overlapping assumptions and their state/confidence.
+
+This provided a useful operational pattern:
+
+```text
+planned edit
+    ↓
+relevant persistent assumptions
+    ↓
+potential conflict
+    ↓
+warning / intervention
+```
+
+The mechanism was concrete.
+
+It still belonged to the established Level-4C knowledge-lifecycle class rather than defining a new capability level.
+
+### KiroGraph baseline proved stronger than the early comparison assumed
+
+The adversarial comparison revisited KiroGraph's established memory mechanisms.
+
+KiroGraph already demonstrated concepts including:
+
+* persistent symbol-linked observations;
+* decisions;
+* errors;
+* patterns;
+* typed knowledge relations such as supersession, conflict and compatibility;
+* stale-review scheduling;
+* prompt/session-context reconstruction;
+* persistent wiki/project knowledge;
+* structural symbol association.
+
+That considerably reduced the remaining novelty space for Nella.
+
+The comparison therefore became approximately:
+
+```text
+KiroGraph
+    broad persistent knowledge
+    +
+    structural/symbol association
+    +
+    conflict relationships
+    +
+    stale review
+    +
+    context reconstruction
+
+Nella
+    explicit assumptions
+    +
+    confidence
+    +
+    boolean validity
+    +
+    file/glob relationships
+    +
+    direct invalidation
+```
+
+Nella's design was more explicit and specialised around an assumption lifecycle.
+
+KiroGraph's persistent knowledge model was broader and could associate knowledge with a richer structural representation.
+
+The difference remained an implementation/workflow distinction **within Level 4C**.
+
+### Cross-agent context-sharing subsystem discovered
+
+The most interesting counter-finding in the adversarial pass was a separate internal Nella context-sharing subsystem backed by SQLite.
+
+The investigated source contained a richer generic context model with facilities including:
+
+* persistent context entries;
+* source-agent identity;
+* workspace identity;
+* visibility controls;
+* time-to-live/expiry;
+* version history;
+* optimistic-concurrency etags;
+* channels;
+* pub/sub concepts;
+* schema validation;
+* encryption;
+* cross-workspace querying;
+* import/export;
+* fuzzy/value search;
+* access metadata.
+
+If exposed coherently to agents, this could represent a more specific capability:
+
+> **shared, versioned, expiring multi-agent state.**
+
+However, the adversarial investigation could not establish that this richer `context-sharing` manager was actually exposed through the principal Nella MCP path examined.
+
+The agent-facing MCP server used the ordinary assumption/change/dependency context manager and multi-agent registry facilities.
+
+The core public exports exposed the agent registry, but did not establish the richer generic context manager as an agent-facing MCP capability.
+
+The correct historical classification was therefore:
+
+> **Interesting implementation direction demonstrated in source; agent-facing capability not demonstrated.**
+
+This possibility was deliberately not pursued into a further exposure investigation.
+
+### Multi-agent coordination did not establish a new Orthoptera boundary
+
+The second pass also reconsidered Nella's explicit agent registration, task, heartbeat, decision and conflict mechanisms.
+
+These were real.
+
+But the established KiroGraph baseline already contained agent utilities and persistent agent/project context, and Orthoptera already had a practical Architectural-AI / implementation-AI role separation.
+
+No evidence showed that Nella's coordination model improved this workflow.
+
+Therefore:
+
+> **Multi-agent coordination implementation: demonstrated. New Orthoptera capability or benefit: not demonstrated.**
+
+### Structural/Python conclusion survived
+
+The adversarial pass did not change the first-pass structural conclusion.
+
+Nella's structural representation remained substantially weaker for Orthoptera's Python code than Code Pathfinder, GitNexus or KiroGraph.
+
+Its architecture/dependency representation was principally file/import oriented.
+
+No demonstrated rich Python structural graph emerged containing the established caller/callee/reference/type traversal capability.
+
+Nella therefore remained interesting for persistent state and knowledge lifecycle, not for superior Python repository understanding.
+
+### Revised capability classification
+
+The final adversarial classification was:
+
+```text
+Level 1  lexical access                         demonstrated
+Level 2  structural navigation                  partial
+Level 3  semantic retrieval                     demonstrated
+Level 4A persistent structural representation   partial
+Level 4B persistent semantic representation     demonstrated
+Level 4C persistent project/agent knowledge     demonstrated
+Level 5  measured Orthoptera benefit            not demonstrated
+```
+
+The crucial qualification was:
+
+> **Nella's Level-4C implementation is specialised, validity-aware and file/dependency-linked; it is not a new Level-4C capability beyond KiroGraph.**
+
+### Final experiment status
+
+After the adversarial pass, even the Nella-specific experiment was downgraded.
+
+The investigation no longer supported a broad Nella experiment.
+
+If Nella were tested at all, the appropriate experiment was an **optional, low-priority falsification test**:
+
+```text
+one proposition
+    ↓
+store in KiroGraph and Nella
+    ↓
+directly change associated source so proposition becomes false
+    ↓
+fresh session
+    ↓
+ask task where stale proposition would cause an error
+```
+
+Measure primarily:
+
+1. whether stale knowledge was surfaced;
+2. whether the agent saw and used it appropriately;
+3. whether stale knowledge was avoided;
+4. whether the resulting answer was correct.
+
+If KiroGraph and Nella behaved equivalently, the investigation should stop.
+
+No token/cost benchmark would then be warranted.
+
+### Provenance
+
+Primary upstream repository:
+
+`https://github.com/nella-labs/nella`
+
+The investigation examined current upstream `main` on 9 August 2026.
+
+The latest identified published release was:
+
+`v0.2.7`, commit `d4743bf`, released 6 April 2026.
+
+Current `main` contained later development beyond that release, so release and `main` were not silently treated as identical.
+
+### Historical progression of the conclusion
+
+The Nella investigation therefore developed as follows:
+
+```text
+first pass
+    ↓
+validity-aware assumptions appear
+potentially distinctive within Level 4C
+    ↓
+KiroGraph comparison
+    ↓
+assumption invalidation becomes
+a specialised Level-4C implementation
+    ↓
+adversarial pass
+    ↓
+KiroGraph baseline proves broader;
+Nella mechanisms become implementation refinements,
+not a new capability boundary
+```
+
+The final conclusion was:
+
+> **Nella does not currently demonstrate a genuinely new Orthoptera capability beyond the KiroGraph baseline.**
+
+Its assumption tracker is a real and potentially useful refinement of persistent project knowledge. It gives an agent-generated proposition an explicit lifecycle and can mark it invalid when declared source/dependency conditions change.
+
+But the mechanism is dependency-triggered trust invalidation rather than semantic truth validation, and KiroGraph already occupies the relevant persistent-project-knowledge capability boundary.
+
+The richer internal SQLite context-sharing subsystem remained an intriguing possibility **if it were exposed as an agent-facing capability**, but that exposure was not demonstrated and was not investigated further.
+
+Accordingly:
+
+* no Nella-specific Wishlist capability was justified;
+* no adoption decision was justified;
+* a narrow Nella-vs-KiroGraph stale-knowledge comparison remained optional and low priority;
+* and generic Nella semantic-retrieval benchmarking was not justified after the GitNexus/KiroGraph baseline had already established that capability class.
+
+No adoption decision followed.
