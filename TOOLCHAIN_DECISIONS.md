@@ -1,12 +1,54 @@
-# AI Toolchain Decisions
+# AI Toolchain Decisions Journal
 
-This document records decisions about how AI tools are used to develop and investigate Orthoptera.
+This document is the **historical journal of actual decisions concerning the AI-assisted development workflow and toolchain used to develop and investigate Orthoptera**.
 
-These decisions concern the **development workflow and AI toolchain**, not the architecture of the Orthoptera software itself.
+These decisions concern the development workflow and AI toolchain, not the architecture of the Orthoptera software itself.
 
-Experimental observations are recorded in `TOOLCHAIN_EXPERIMENTS.md`. Established knowledge derived from those observations is recorded in `TOOLCHAIN_FINDINGS.md`. Potential future capabilities are recorded in `TOOLCHAIN_WISHLIST.md`.
+## Journal invariants
 
-This document is a historical decision record. Each entry records a decision that was actually made, together with the context and rationale available when it was made. Later decisions may refine or supersede earlier ones, but historical decisions should not be silently rewritten or removed merely because later understanding is better.
+This journal is **append-only in its normal operation**.
+
+Only decisions that have actually been made belong here.
+
+Each decision preserves the decision, context, rationale, constraints and understanding that existed when it was made. Later decisions may qualify, supersede or reverse earlier decisions, but earlier entries are not retrospectively rewritten merely to express the current decision state more cleanly.
+
+A decision entry may include contemporary implications, unresolved questions or possible future consequences when those formed part of the decision context. Their presence does not turn the journal into a mutable planning document.
+
+The absence of a later decision is not itself a new decision. Current planning, candidate capabilities and proposed experiments belong in their respective mutable documents unless and until an actual decision is made.
+
+Historical uncertainty and historical non-decisions are information where they explain the scope of a decision. Statements that a matter remained unresolved at a particular point may therefore remain in the historical entry.
+
+## What a decision should preserve
+
+Where applicable, a decision should retain:
+
+* what was decided;
+* when it was decided;
+* the scope of the decision;
+* the alternatives, evidence or constraints that mattered;
+* the rationale;
+* important contemporary implications or unresolved questions;
+* and any later relationship to an earlier decision should be stated in the later entry.
+
+A capability demonstrated by a tool is not automatically a decision to adopt that capability.
+
+An experimental observation or finding is not automatically a project requirement.
+
+## Relationship to the other toolchain records
+
+The toolchain documentation is deliberately divided by function:
+
+* `TOOLCHAIN_EXPERIMENTS.md` — completed investigations, experiments and their contemporary evidence;
+* `TOOLCHAIN_FINDINGS.md` — durable findings and their historical development;
+* `TOOLCHAIN_DECISIONS.md` — actual decisions and their historical development;
+* `TOOLCHAIN_WISHLIST.md` — the mutable inventory of candidate capabilities;
+* `TOOLCHAIN_PLANNED_EXPERIMENTS_SEQUENCE.md` — the mutable current sequence of experiments still worth considering or running.
+
+These records may legitimately overlap when they preserve different aspects of the same history. That overlap must not be eliminated merely for concision.
+
+## Decisions journal
+
+The historical decision record follows.
 
 ---
 
