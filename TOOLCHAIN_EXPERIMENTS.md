@@ -1166,6 +1166,7 @@ Related article investigated:
 `https://corestory.ai/post/mcp-servers-codebase-context-ai-coding-agents`
 
 The article motivated the Tier taxonomy; implementation claims were checked against the official Filesystem server rather than accepted from the article alone.
+
 ---
 
 ## Recovery entry — KiroGraph investigation
@@ -1289,6 +1290,7 @@ This established:
 An important qualification was retained: the implementation examined did not establish GitNexus-style BM25/vector Reciprocal Rank Fusion specifically. Exact, semantic and full-text results were combined and prioritised, but the stronger RRF claim was not demonstrated.
 
 Semantic retrieval therefore places KiroGraph in the Level-3 capability class already established by GitNexus rather than introducing a new retrieval primitive.
+
 ### Persistent repository representation
 
 KiroGraph stores normal project state under:
@@ -1420,6 +1422,7 @@ The investigation therefore distinguished:
 * persistent semantic/vector representation;
 * persistent agent/project knowledge;
 * persistent declarative/wiki knowledge.
+
 ### Refined persistent-knowledge vocabulary
 
 The KiroGraph investigation motivated a more precise decomposition of what had previously been called "persistent repository knowledge":
@@ -1528,6 +1531,7 @@ No Orthoptera measurement established that these mechanisms actually produced:
 The appropriate conclusion remained:
 
 > **Capability and mechanism demonstrated; Orthoptera efficiency benefit not demonstrated.**
+
 ### Contemporary experiment implication
 
 A further generic structural/semantic-repository-navigation experiment was not the most useful next step because GitNexus already supplied that treatment class.
