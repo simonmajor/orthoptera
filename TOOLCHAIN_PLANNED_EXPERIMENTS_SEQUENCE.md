@@ -10,7 +10,11 @@ The completed-experiment journal records what has actually happened.
 
 This document records what we intend to investigate next, what is currently queued, what dependencies or prerequisites exist, and how the investigation should be sequenced.
 
-Planning statements belong here rather than in `TOOLCHAIN_EXPERIMENTS.md`.
+This is the mutable record of **current experimental intent**.
+
+Historical journal entries may legitimately contain the proposals, hypotheses, unresolved questions, implications and suggested future experiments that formed part of an investigation at the time. Those statements remain historical evidence and are not removed merely because they are forward-looking.
+
+An experiment belongs here when it remains part of the current planned or candidate sequence.
 
 ## Relationship to the toolchain journals
 
@@ -44,7 +48,7 @@ Do not create an experiment solely because a capability exists. There should be 
 
 ### No experiment is promoted here merely because it appeared in historical discussion
 
-Historical experiment proposals remain recoverable through the repository history and completed-experiment journal. They should only be placed in the active sequence when they remain intentionally planned after the current documentation checkpoint.
+Historical experiment proposals are deliberately preserved in the completed-experiment journal as part of the contemporary investigation record. They should only be placed in the active sequence when they remain intentionally planned after the current documentation checkpoint.
 
 ### Candidate: structural repository navigation comparison
 
@@ -98,11 +102,47 @@ The useful success criterion is not simply fewer tool calls. The meaningful ques
 
 This should remain conceptually separate from the structural-navigation comparison. A persistent semantic/structural representation introduces additional capabilities and costs that should not be attributed to structural navigation generally.
 
+Run or otherwise resolve the structural-navigation comparison first unless there is a specific reason to skip it. Otherwise a successful treatment could conflate the effects of structural navigation, semantic retrieval and persistent reuse.
+
+### Candidate: persistent project/agent knowledge
+
+**Purpose:** Determine whether persistent agent-generated project knowledge provides an operational advantage over reconstructing the same knowledge from repository-derived context in a later session.
+
+**Relevant prior investigation:** KiroGraph.
+
+This is a Level-4C knowledge-lifecycle experiment rather than another repository-index or semantic-retrieval comparison. The important distinction is between rediscovering project knowledge from source-derived context and selectively retrieving knowledge that an earlier agent session deliberately persisted.
+
+**Possible control:**
+
+```text
+later agent session
+        ↓
+repository-derived rediscovery
+        ↓
+task
+```
+
+**Possible treatment:**
+
+```text
+earlier agent session
+        ↓
+persistent project/agent knowledge
+        ↓
+later agent session retrieves relevant knowledge
+        ↓
+task
+```
+
+The experiment should test whether the persisted knowledge is actually retrieved and used, whether unnecessary rediscovery is avoided, and whether correctness is maintained or improved. Token, context, turn or cost reductions should only be claimed if directly measured.
+
 ### Candidate: Nella stale-knowledge mechanism comparison
 
 **Purpose:** If still considered worthwhile, compare the operational handling of directly invalidated persistent knowledge between Nella and the existing KiroGraph baseline.
 
 **Scope:** mechanism comparison only; not a general productivity benchmark.
+
+This is an optional refinement experiment **within Level 4C**, not an investigation of a new capability level. It should follow the KiroGraph persistent-project-knowledge experiment so that the treatment baseline has first been established.
 
 **Potential measurements:**
 
