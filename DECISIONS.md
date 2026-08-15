@@ -60,3 +60,78 @@ Where the design establishes a required property but leaves its semantics or imp
 
 This distinction is particularly important before implementing acoustic detection, event storage or downstream comparison. Exploratory parameters must not become production defaults until the representation and detection behaviour have been independently validated, as required by the acoustic-event validation decision.
 
+
+---
+
+## Recovery entry — early decisions superseded by whole-document refinement
+
+**Original decisions:** 6–7 August 2026
+**Recovered into decision journal:** 15 August 2026
+
+During the documentation archaeology, two early decisions were found to have been removed when `DECISIONS.md` was rewritten after the initial local-corpus survey.
+
+The later decisions remain valid historical entries and are not altered by this recovery. This entry restores the earlier decision record and makes the subsequent relationship explicit.
+
+### 2026-08-06 — Use Dynamic Time Warping for temporal-envelope comparison
+
+Decision:
+
+Use Dynamic Time Warping (DTW) on the temporal envelope representation then described as a chirp envelope.
+
+Reason:
+
+DTW was considered more robust to tempo variation than direct correlation.
+
+Alternative considered:
+
+Cross-correlation.
+
+### Later refinement
+
+The 7 August local-corpus survey showed that the unit being compared could not safely be assumed to be a universally defined biological chirp.
+
+The later decision **“DTW applies to validated temporal event representations”** therefore retained DTW while refining what may legitimately be supplied to it.
+
+The historical relationship is:
+
+```text
+initial decision
+DTW on chirp envelopes
+        ↓
+survey exposes ambiguity in "chirp"
+        ↓
+refined decision
+DTW on validated temporal event representations
+```
+
+The later decision refines the earlier one; it does not mean the earlier decision and its rationale never existed.
+
+---
+
+### 2026-08-07 — Restrict the initial Xeno-canto development corpus
+
+Decision:
+
+For initial development, use recordings satisfying:
+
+```text
+gen:Gryllus q:A id?:no len:"10-90"
+```
+
+rather than downloading the entire genus.
+
+Rationale:
+
+* keep the initial corpus manageable, at approximately 173 recordings at the time;
+* avoid overwhelming early testing;
+* use recordings long enough to provide multiple independent samples;
+* exclude recordings with uncertain identification;
+* start with quality-A material to provide a relatively homogeneous development corpus.
+
+### Later status
+
+This was a **development-corpus scoping decision**, not a claim that the restricted corpus was scientifically sufficient for species-level conclusions.
+
+Subsequent experimental work retained the requirement to use multiple recordings per species and to characterise within-species variability before interpreting between-species differences.
+
+The query and its methodological use remained present elsewhere in the repository, but the fact that its adoption was an explicit project decision had been lost from `DECISIONS.md`. This recovery restores that distinction.
