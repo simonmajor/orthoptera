@@ -1166,3 +1166,424 @@ Related article investigated:
 `https://corestory.ai/post/mcp-servers-codebase-context-ai-coding-agents`
 
 The article motivated the Tier taxonomy; implementation claims were checked against the official Filesystem server rather than accepted from the article alone.
+---
+
+## Recovery entry — KiroGraph investigation
+
+**Investigation date:** 9 August 2026
+**Recovered into journal:** 15 August 2026
+**Candidate:** `davide-desio-eleva/kirograph`
+**Upstream examined:** `main`
+**Stable release independently identified during the investigation:** `v0.28.1`, published 3 July 2026
+
+This investigation examined KiroGraph source-first against the capability baseline established by the preceding MCP Filesystem, Code Pathfinder and GitNexus investigations.
+
+The important result was that KiroGraph substantially overlaps with GitNexus in repository indexing and retrieval, but extends the investigated capability model into a broader form of **persistent agent/project knowledge**.
+
+The investigation therefore changed the meaning of "persistent repository knowledge" in the developing Orthoptera toolchain vocabulary.
+
+### Implementation character
+
+Current KiroGraph was found to be a local TypeScript MCP server built around a persistent SQLite repository graph with optional vector retrieval and a broad set of surrounding modules.
+
+The source tree contained dedicated facilities for areas including:
+
+* architecture analysis;
+* compression;
+* context construction;
+* data indexing;
+* documentation;
+* graph storage and traversal;
+* memory;
+* patterns;
+* reference resolution;
+* search;
+* security;
+* synchronisation;
+* vectors;
+* wiki/project knowledge.
+
+The public API constructed components including a graph database, reference resolver, vector manager, context builder, architecture analyser, indexing pipeline and searcher directly.
+
+This established that KiroGraph was not merely an MCP wrapper around an external search service.
+
+### Structural repository representation
+
+KiroGraph uses Tree-sitter parsing and constructs a persistent structural repository representation.
+
+Demonstrated graph concepts included:
+
+* functions;
+* methods;
+* classes;
+* interfaces;
+* types and enums;
+* variables and constants;
+* modules;
+* imports and exports;
+* calls;
+* references;
+* inheritance and implementation relationships;
+* instantiation;
+* overrides;
+* decorators;
+* type relationships;
+* return relationships.
+
+It also exposes higher-level derived representations including packages, architecture/layer information, graph snapshots, communities and hotspots.
+
+This places KiroGraph clearly within the previously established **structural repository-navigation** capability class.
+
+However, no evidence sufficient to establish a general program-dependence graph, complete control-flow model or general inter-procedural taint/data-flow system was found.
+
+### Structural MCP navigation
+
+The investigated MCP surface included structural operations for concepts such as:
+
+* search;
+* context construction;
+* callers;
+* callees;
+* impact;
+* node details;
+* files;
+* paths;
+* type hierarchy;
+* module API;
+* rename preview;
+* flows;
+* communities;
+* architecture/package analysis;
+* dead-code and circular-dependency analysis;
+* hotspots and surprising relationships;
+* snapshots and differences.
+
+The structural query schemas provided bounded caller/callee and impact operations and different source/detail levels.
+
+The conclusion was therefore:
+
+> **KiroGraph demonstrably provides Level-2 structural repository navigation.**
+
+This capability itself was not novel after Code Pathfinder and GitNexus.
+
+### Semantic retrieval
+
+KiroGraph also demonstrated optional semantic/vector retrieval.
+
+Its context-building path combined:
+
+1. symbol-token extraction;
+2. exact-name lookup;
+3. semantic/vector search;
+4. full-text search;
+5. deduplication;
+6. import resolution;
+7. result trimming to a configured node limit.
+
+Multiple vector implementations/backends were present.
+
+This established:
+
+> **Hybrid exact + semantic + lexical retrieval is implemented.**
+
+An important qualification was retained: the implementation examined did not establish GitNexus-style BM25/vector Reciprocal Rank Fusion specifically. Exact, semantic and full-text results were combined and prioritised, but the stronger RRF claim was not demonstrated.
+
+Semantic retrieval therefore places KiroGraph in the Level-3 capability class already established by GitNexus rather than introducing a new retrieval primitive.
+### Persistent repository representation
+
+KiroGraph stores normal project state under:
+
+```text
+.kirograph/
+```
+
+including a SQLite graph database.
+
+The API can initialise a project and subsequently reopen that persisted representation.
+
+This demonstrated reuse beyond a single query or MCP process:
+
+> **Persistent repository representation: demonstrated.**
+
+The investigation also found synchronisation/staleness operations including full indexing, synchronisation, dirty-state checks and pending-sync information.
+
+Git changes could be used when determining whether the representation required synchronisation, with filesystem comparison as a fallback.
+
+This supported:
+
+* persistent graph reuse;
+* incremental synchronisation;
+* dirty/stale-state detection;
+* Git-aware change detection.
+
+It did not establish that KiroGraph has exactly the same branch-aware index semantics as GitNexus.
+
+### Discover → inspect → fetch
+
+KiroGraph showed a particularly explicit progressive-retrieval interface.
+
+The investigated division was approximately:
+
+```text
+kirograph_search
+    ↓
+locations / discovery
+
+kirograph_node
+    ↓
+symbol details
+    ↓
+optional source
+
+kirograph_context
+    ↓
+task-oriented selection
+    ↓
+bounded related code
+```
+
+The search operation could return locations without source, while node/context operations provided progressively richer detail.
+
+File-oriented operations also exposed several read modes rather than forcing every retrieval to return an entire file.
+
+This reinforced the existing Orthoptera capability pattern:
+
+> **discover → inspect → fetch**
+
+and demonstrated that structural and semantic discovery can be used before source retrieval.
+
+As with earlier tools, this mechanism did **not** demonstrate a hard bound on downstream model context or total token consumption.
+
+### Context/cache mechanisms
+
+KiroGraph also contained explicit mechanisms aimed at controlling repeated context.
+
+One investigated feature cached unchanged file reads and could return a compact marker instead of repeating unchanged content immediately, with a separate retrieval operation for cached content.
+
+The project described this in terms of reducing repeated context and improving stable-prefix/KV-cache behaviour.
+
+The mechanism was real enough to be experimentally interesting, but the claimed downstream economics were not treated as established:
+
+> **cache/context mechanism demonstrated; model-token or AI-credit consequence not demonstrated for Orthoptera.**
+
+The investigation also noted a countervailing cost: enabling a large MCP tool surface itself consumes model context through tool definitions.
+
+A separate microexperiment on this cache/read mechanism was considered potentially useful but secondary to the more important persistent-knowledge question.
+
+### Persistent project/agent knowledge
+
+The most important KiroGraph finding was its optional persistent-memory layer.
+
+The implementation/documentation exposed project-memory concepts including:
+
+* cross-session observations;
+* decisions;
+* errors;
+* patterns;
+* links between memory and code symbols;
+* typed relations such as supersession, conflict and compatibility;
+* stale/review mechanisms;
+* conflict handling;
+* prompt/session-context reconstruction.
+
+This is materially different from merely persisting a source-derived graph.
+
+The distinction developed during the investigation was:
+
+```text
+source
+  ↓
+persistent graph/index
+```
+
+versus:
+
+```text
+agent/project experience
+  ↓
+persistent observations / decisions / knowledge
+  ↓
+future retrieval
+```
+
+KiroGraph therefore supplied a concrete implementation of **persistent agent-generated project knowledge**.
+
+### Wiki/project knowledge
+
+KiroGraph also contained an opt-in wiki/project-knowledge mechanism supporting persistent Markdown knowledge pages and related maintenance/retrieval operations.
+
+This provided another form of persistent project knowledge distinct from both the structural graph and episodic memory.
+
+The investigation therefore distinguished:
+
+* persistent source-derived structural representation;
+* persistent semantic/vector representation;
+* persistent agent/project knowledge;
+* persistent declarative/wiki knowledge.
+### Refined persistent-knowledge vocabulary
+
+The KiroGraph investigation motivated a more precise decomposition of what had previously been called "persistent repository knowledge":
+
+```text
+Level 4A — persistent structural representation
+           source-derived graph/index survives sessions
+
+Level 4B — persistent semantic representation
+           semantic/vector search representation survives sessions
+
+Level 4C — persistent project/agent knowledge
+           agent- or human-generated project knowledge survives
+           independently of reconstructing it from source
+```
+
+KiroGraph demonstrably supplied examples of all three.
+
+The genuinely interesting addition beyond the established GitNexus baseline was **Level 4C**.
+
+### KiroGraph versus GitNexus
+
+The investigation concluded that KiroGraph did **not** materially establish a new primitive in:
+
+* structural graph navigation;
+* persistent source-derived repository indexing;
+* semantic/vector retrieval;
+* incremental repository synchronisation;
+* bounded discovery/context selection.
+
+GitNexus had already established that capability envelope.
+
+KiroGraph's important extension was:
+
+> **persistent agent/project knowledge associated with the repository and reusable across sessions.**
+
+This changed the next useful experimental question from:
+
+> Is another persistent structural/semantic code graph useful?
+
+to:
+
+> **Can durable agent/project knowledge be more useful or cheaper to retrieve than rediscovering the same knowledge from the repository in every session?**
+
+### Python relevance and structural limitations
+
+Python was supported by the Tree-sitter layer and structural graph.
+
+However:
+
+> **Python parser support was not treated as evidence of complete Python semantic understanding.**
+
+The investigation did not establish language-server-grade type inference, complete dynamic call resolution or complete graph coverage for Python.
+
+Likewise, implementation of vector search did not establish superior retrieval quality.
+
+Graph existence and retrieval implementation were treated as capabilities requiring later empirical validation, not as evidence of correctness or task benefit.
+
+### Local computation and resource implications
+
+Core repository parsing, graph construction and SQLite persistence operate locally.
+
+Optional semantic and local-synthesis facilities can impose additional runtime/model requirements.
+
+The investigation noted that some optional local synthesis functionality could require multi-gigabyte model downloads and several gigabytes of RAM.
+
+This mattered to Orthoptera because local computation can exchange model-context cost for local CPU, RAM, storage and indexing time rather than eliminate cost.
+
+### Repository scoping and authority
+
+KiroGraph accepts a project path/root and constrains its graph operations around that project representation.
+
+This demonstrated repository configuration/scoping.
+
+It did **not** establish a security sandbox.
+
+The wider tool surface could also include shell execution, reinforcing the distinction between:
+
+* repository selection;
+* tool profile;
+* and actual authority/isolation.
+
+### Token/context/cost conclusion
+
+KiroGraph demonstrated mechanisms that could plausibly reduce unnecessary model-visible material:
+
+* compact search;
+* bounded node/context selection;
+* progressive detail levels;
+* semantic retrieval before source retrieval;
+* cached reads;
+* persistent graph reuse;
+* persistent project-memory retrieval.
+
+No Orthoptera measurement established that these mechanisms actually produced:
+
+* fewer cumulative input tokens;
+* fewer cached tokens;
+* fewer output tokens;
+* fewer turns;
+* lower AI credits;
+* lower monetary cost;
+* lower total latency;
+* or better task correctness.
+
+The appropriate conclusion remained:
+
+> **Capability and mechanism demonstrated; Orthoptera efficiency benefit not demonstrated.**
+### Contemporary experiment implication
+
+A further generic structural/semantic-repository-navigation experiment was not the most useful next step because GitNexus already supplied that treatment class.
+
+The distinct experiment justified by KiroGraph was instead:
+
+> **Does persistent agent-generated project knowledge provide useful cross-session context that cannot be efficiently reconstructed from repository graph/search tools alone?**
+
+A proposed design used two sessions.
+
+In the first, an agent would establish a non-obvious project fact, decision or implementation constraint and deliberately persist it.
+
+In a genuinely fresh second session, a related task would require that knowledge.
+
+The control would rediscover the information using normal repository mechanisms; the treatment would retrieve the persisted project knowledge.
+
+Any accounting should include **the cost of creating the memory**, not merely its later retrieval benefit.
+
+Primary outcomes should include correctness and successful retrieval. Model turns, source volume, cumulative tokens, cache, AI credits, indexing costs and stale/incorrect-memory incidents could be measured separately.
+
+### Secondary cache experiment
+
+A smaller optional experiment was also identified around repeated unchanged file reads and KiroGraph's cached-content mechanism.
+
+The purpose would be to measure actual host/model-visible effects rather than accept claims based on the compact cache marker itself.
+
+This remained secondary to the Level-4C project-knowledge experiment.
+
+### Provenance
+
+Primary upstream repository:
+
+`https://github.com/davide-desio-eleva/kirograph`
+
+The investigation examined current upstream `main` on 9 August 2026.
+
+A tagged Go-module release `v0.28.1`, published 3 July 2026, was independently identified during the investigation, but it was not silently treated as equivalent to the broader current `main` implementation.
+
+### Historical conclusion
+
+The investigation's final capability classification was:
+
+```text
+Level 1  lexical retrieval                   demonstrated
+Level 2  structural repository navigation    demonstrated
+Level 3  semantic retrieval                  demonstrated
+Level 4A persistent structural index         demonstrated
+Level 4B persistent semantic index           demonstrated
+Level 4C persistent project/agent knowledge  demonstrated
+Level 5  measured Orthoptera benefit         not demonstrated
+```
+
+The key research result was therefore not that KiroGraph was another superior code-search product.
+
+It was:
+
+> **GitNexus established persistent structural + semantic repository representation; KiroGraph extended the investigated capability model into persistent agent/project knowledge.**
+
+No adoption decision followed.
