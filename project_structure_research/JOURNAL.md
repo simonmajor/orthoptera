@@ -452,9 +452,9 @@ The audit therefore demonstrated another important rule:
 
 > Whether removed text represents knowledge loss depends on the semantic role of the document, not merely on the existence of deletions.
 
-### Historical recovery checkpoint
+### Historical recovery first-pass checkpoint
 
-After the toolchain and main-project archaeology, the project considered historical knowledge recovery complete.
+After the toolchain and main-project archaeology, the project considered the historical knowledge recovery first pass complete.
 
 The remaining work was explicitly reclassified as:
 
@@ -656,7 +656,7 @@ The raw bootstrap commit and its review/refinement commit were both retained and
 
 At the time this history was recovered into the new journal:
 
-* historical knowledge recovery for Orthoptera and its toolchain was considered complete;
+* the historical knowledge recovery first pass for Orthoptera and its toolchain was considered complete;
 * the toolchain investigation was paused at its checkpoint;
 * this project-structure investigation had a minimal provisional boundary;
 * no final repository attachment mechanism had been chosen;
@@ -668,3 +668,113 @@ This recovery sequence is itself evidence.
 It should not be treated as proof that every practice developed during it is optimal.
 
 The purpose of preserving it here is to make those practices, failures and changes in understanding available for later analysis rather than requiring them to be reconstructed again from Git history and conversation logs.
+
+
+---
+
+## Extraction review — findings, decisions and unpromoted recovery practices
+
+**Host project:** Orthoptera  
+**Host repository:** `https://github.com/simonmajor/orthoptera`  
+**Review date:** 17 August 2026  
+**Repository revision reviewed:** `f8cd0aaf9450e632cbd23c5f1862b9f560631466` on `main`  
+**Evidence reviewed:** This journal, the provisional sub-project instructions, README and plan, root `AGENTS.md` and `CONTRIBUTING.md`, and the current role/invariant sections of the Orthoptera toolchain journals and planned-experiment sequence.
+
+### Purpose and method
+
+This was the first bounded extraction review of the recovered Orthoptera documentation-recovery case study.
+
+The review divided the recovered sequence into its causal episodes: the triggering knowledge loss, failed whole-document restructuring, mechanical restoration, change-specific editing workflows, main-project archaeology, reusable-project requirements, workspace handoff and subordinate-instruction discovery.
+
+Candidate claims were classified as:
+
+* observed or documented evidence;
+* durable finding;
+* actual decision;
+* recovery practice;
+* hypothesis;
+* unresolved question;
+* or current requirement.
+
+A finding required supporting evidence, bounded scope, limitations and provenance. A decision required an actual adopted choice or requirement rather than an observation, candidate mechanism or practice that happened to work.
+
+### Findings promoted
+
+The evidence justified creating `FINDINGS.md` and promoting these initial findings:
+
+* document role determines whether deletion is knowledge loss;
+* historical epistemic state and mutable current intent are distinct project state;
+* whole-document AI synthesis is hazardous for evidence-bearing documentation within the demonstrated scope;
+* instruction-file existence and reliable instruction discovery are separate properties;
+* task-context transfer and repository-workspace transfer are separate;
+* and moving attachment state and historical evidence provenance must remain independent.
+
+The entries preserve their evidence, scope and limitations rather than presenting the recovery case as universal proof.
+
+### Decisions promoted
+
+The evidence justified creating `DECISIONS.md` and promoting these actual decisions or adopted requirements:
+
+* recover and verify historical knowledge before broad structural reorganisation;
+* separate append-only historical journals from mutable planning;
+* maintain a minimal provisional research boundary without prematurely selecting mechanisms;
+* treat new-host and existing-host adoption as first-class paths;
+* make instantiated documentation host-owned;
+* keep the project-structure and AI-toolchain projects as conceptual peers without recursive physical containment;
+* keep attachment identity, physical mechanism, update policy and evidence provenance distinct;
+* and provide an explicit provisional root discovery path for the subordinate `AGENTS.md`.
+
+No attachment mechanism, final repository location, update policy, metadata syntax, bootstrap interface or final topology was promoted as decided.
+
+### Practices deliberately not promoted
+
+The review explicitly declined to promote these recovery practices into durable findings or general decisions:
+
+* deliberately asymmetric paste-block sizes;
+* beginning paste blocks with a blank line;
+* retaining every short-lived recovery branch until a larger exercise completes;
+* always preserving raw implementation-agent output as a commit;
+* always preferring direct EOF paste over a generated patch;
+* always separating mechanical restoration and structural adaptation into different commits;
+* and using four-backtick outer fences as a general repository-wide convention.
+
+These practices responded to real failure modes, but the recovered evidence does not establish that each mitigation generalises beyond its workflow and tool context.
+
+Their exclusion is deliberate rather than accidental. The practices and their purposes remain recoverable in the earlier journal entry and in this review.
+
+### Candidate validation experiments
+
+The review found obvious bounded experiments for the most material non-promoted practices and added them to the end of `PLAN.md`:
+
+* compare direct append, generated patch and whole-document replacement across append-only and existing-text changes;
+* compare raw checkpoints and restoration/adaptation commit separation against an equivalent combined transformation;
+* and test nested Markdown-fence transport across relevant tools and versions where the earlier failure remains reproducible.
+
+Asymmetric block sizes, leading blank lines and universal branch retention do not currently justify standalone experiments. They may be variables in broader workflow experiments if later evidence makes them material.
+
+These are candidate experiments only. Recording them does not authorise their execution.
+
+### Recovery first-pass terminology
+
+The documentation sweep established that earlier statements describing historical recovery as `complete` referred to completion of the recovery first pass, not completion of all recovery-derived documentation work.
+
+This journal entry records that clarification. As a narrow exception to normal journal immutability, the earlier checkpoint heading and two completion statements in this reconstructed entry were refined to say `recovery first pass` explicitly. The change clarifies their intended contemporary meaning; it does not remove evidence or replace the earlier interpretation with a new one.
+
+The broader recovery-derived documentation second pass remains outstanding. Its scope includes current-document consistency, authority and purpose, provenance, cross-references, duplication, misplaced material, residual knowledge-loss checks, subordinate-instruction semantics, structural research, naming and eventual isolated moves.
+
+### Targeted current-guidance correction
+
+The review confirmed that root `CONTRIBUTING.md` contained an over-broad planning-separation invariant. It could be read as excluding implications, hypotheses, unresolved questions, speculation and proposed follow-up work from completed-work journals.
+
+The invariant was narrowly reconciled with the established journal model. This targeted correctness fix does not execute the broader documentation second pass.
+
+### Resulting state
+
+At this checkpoint:
+
+* the initial findings and decisions extraction is complete;
+* dedicated findings and decisions journals now exist;
+* non-promoted practices and candidate validation experiments are explicitly recorded;
+* the recovery first-pass/second-pass distinction is explicit;
+* the root planning-separation defect is corrected;
+* and the broader research, experiments and documentation second pass remain planned but unexecuted.

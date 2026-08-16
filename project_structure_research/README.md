@@ -15,7 +15,7 @@ Both new-host and existing-host bootstrap paths are first-class:
 * a new host may initialise a repository, attach reusable infrastructure and seed initial documentation and instructions;
 * an existing host must first inspect and preserve its source, documentation, history, project knowledge and external relationships before adapting any scaffold.
 
-Orthoptera's documentation-recovery exercise is a likely founding case study for the existing-host path. Its history is not reproduced in this initial seed.
+Orthoptera's documentation-recovery exercise is the founding case study for the existing-host path. A recovery first-pass reconstruction is recorded in `JOURNAL.md`; the broader recovery-derived documentation second pass remains outstanding in `PLAN.md`.
 
 ### Host-owned instantiated documentation
 
@@ -51,10 +51,12 @@ This seed does not impose a final metadata syntax. The requirement is that exper
 ## Documentation roles
 
 * `JOURNAL.md` is the append-only historical record of completed work and its contemporary understanding.
+* `FINDINGS.md` is the append-only historical journal of durable findings supported by the evidence.
+* `DECISIONS.md` is the append-only historical journal of actual decisions made by the investigation.
 * `PLAN.md` is the mutable record of current questions, candidate work and deferred deliverables.
 * `AGENTS.md` contains instructions scoped to this provisional sub-project.
 
-Additional document roles should be introduced only when actual research demonstrates a need. In particular, findings and decisions must not be inferred merely from journal entries or plans.
+Additional document roles should be introduced only when actual research demonstrates a need. Findings and decisions must not be inferred merely from journal entries or plans; the initial records were introduced only after an explicit extraction review concluded that the recovered evidence justified them.
 
 ## Current limits
 

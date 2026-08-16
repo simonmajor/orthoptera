@@ -15,7 +15,7 @@ This is the mutable record of current intended work and sequencing for the provi
 * Which journal and mutable-document topology best preserves history while keeping current state usable?
 * How can an initially embedded provisional sub-project later be extracted into an independently reusable repository?
 
-The investigation must cover both a new-host path and an existing-host path. Orthoptera's completed documentation-recovery work is a candidate case study for the latter, but recovering that history into this journal is a separate next phase.
+The investigation must cover both a new-host path and an existing-host path. Orthoptera's documentation-recovery first pass is the founding case study for the latter. Its recovery-derived documentation second pass remains a separate planned phase.
 
 ## Deferred candidate deliverables
 
@@ -40,17 +40,19 @@ This checkpoint captures current intent inherited from the Orthoptera documentat
 
 It is deliberately a planning record rather than a finding or decision. The recovered history in `JOURNAL.md` remains the evidence base.
 
-### Immediate continuation in a fresh project-structure context
+### Extraction checkpoint completed
 
-Before beginning broad new attachment research:
+The first bounded extraction review of the recovered documentation-recovery journal completed on 17 August 2026.
 
-1. review the recovered documentation-recovery journal;
-2. extract candidate durable findings from the case study;
-3. distinguish actual decisions already made from provisional practices that merely worked during the recovery;
-4. create findings and/or decisions records only if the recovered evidence demonstrates a need for those document roles;
-5. update this plan from that analysis rather than rewriting the journal.
+It:
 
-Do not perform that extraction by summarising away the historical evidence.
+1. identified evidence-supported durable findings;
+2. distinguished actual decisions from provisional practices that merely worked during the recovery;
+3. concluded that dedicated findings and decisions journals were justified;
+4. recorded practices deliberately not promoted and candidate experiments that could test the most material ones;
+5. refined this plan without summarising away the historical evidence.
+
+Further findings and decisions may emerge from later research. The initial extraction is a checkpoint, not a claim that the case study can produce no further knowledge.
 
 ### Target attachment outcome
 
@@ -117,9 +119,9 @@ The project-structure and AI-toolchain projects are conceptual peers. Logical re
 
 ### Repository-wide documentation second pass remains outstanding
 
-Historical knowledge recovery for Orthoptera and the toolchain has been completed.
+The historical knowledge recovery first pass for Orthoptera and the toolchain has been completed.
 
-A repository-wide documentation second pass was deliberately deferred until after recovery.
+A repository-wide recovery-derived documentation second pass was deliberately deferred until after that first pass.
 
 Known work includes:
 
@@ -128,6 +130,9 @@ Known work includes:
 * make document authority and cross-reference rules explicit where useful;
 * improve external/source provenance and links back to underlying investigations;
 * distinguish current state from historical evidence consistently;
+* review duplication, misplaced material and any residual knowledge loss explicitly;
+* review temporal claims such as `complete`, `current`, `next`, `deferred` and `initial` against the recovery checkpoint;
+* refresh the provisional project-structure orientation documents where their seed-era wording no longer states the first-pass/second-pass distinction clearly;
 * revisit subordinate `AGENTS.md` discovery, scope, inheritance and conflict semantics;
 * investigate whether folders improve context scoping and future extraction;
 * review naming once document roles have stabilised;
@@ -139,20 +144,16 @@ Those structural questions are now research inputs to this project. Broad restru
 
 Targeted correctness fixes may still precede the full structural pass where current guidance is known to be misleading.
 
-### Known guidance defect requiring early attention
+### Targeted guidance correction completed
 
-Root `CONTRIBUTING.md` still contains an over-broad planning-separation invariant inherited from the recovery process.
-
-The corrected model is:
+On 17 August 2026, the over-broad planning-separation invariant in root `CONTRIBUTING.md` was reconciled with the model already used by the project-structure and toolchain documents:
 
 * journals preserve completed work in its contemporary epistemic state;
-* historical entries may include implications, unresolved questions, speculation and possible follow-up work understood at that time;
+* historical entries may include implications, hypotheses, unresolved questions, speculation and proposed follow-up work understood at that time;
 * mutable planning documents record current intent and sequencing;
 * later changes in intent do not rewrite historical entries.
 
-The provisional project-structure documents already encode the corrected model.
-
-The root guidance should be reconciled through a small reviewed refinement rather than waiting indefinitely for the complete repository-wide second pass.
+This targeted correctness fix did not execute the broader repository-wide documentation second pass.
 
 ### Known toolchain-document second-pass work
 
@@ -191,11 +192,12 @@ Do not combine broad content refinement with repository moves/renames merely for
 The preferred sequence remains approximately:
 
 ```text
-recover evidence                 complete
+recover evidence first pass      complete
         ↓
 capture recovery case study      complete
         ↓
-extract findings / decisions
+extract initial findings / decisions
+                                complete
         ↓
 research project structure,
 attachments and agent semantics
@@ -215,3 +217,51 @@ when evidence justifies it
 ```
 
 This sequence may itself be revised by later project-structure findings. If so, record the revised understanding rather than rewriting this checkpoint.
+
+
+---
+
+## Candidate experiments arising from the extraction review
+
+The initial extraction deliberately did not promote several recovery practices into durable findings or general decisions. The following bounded experiments could test the most material practices. They are candidates only; recording them here does not authorise their execution.
+
+### Change-shape editing workflow experiment
+
+Compare representative evidence-bearing documentation changes performed through:
+
+1. direct EOF append with structural verification;
+2. generated patch with syntax and deletion checks;
+3. whole-document replacement with equivalent preservation instructions.
+
+Measure:
+
+* unintended deletions;
+* omissions and duplicated blocks;
+* provenance or qualification loss;
+* patch/application failures;
+* reviewer time;
+* and defects detected before merge.
+
+Vary append-only additions and refinements to existing text separately. This tests the broader validity of the recovery's direct-append preference, patch preference and zero-deletion checks without presuming that one workflow is universally best.
+
+### Checkpoint and commit-granularity review experiment
+
+Prepare equivalent recovery transformations in forms that:
+
+1. retain a raw implementation-agent checkpoint;
+2. separate mechanical restoration from structural adaptation;
+3. combine the work into one otherwise equivalent commit.
+
+Ask reviewers who did not perform the transformation to identify the historical source, explain the transformation and detect seeded loss or changed interpretation. Measure accuracy, review time and recoverability.
+
+This tests the value of raw-agent checkpoints and restoration/adaptation commit separation. Retaining every recovery branch is not independently promoted; branch retention should be assessed only insofar as it materially changes reviewability or recovery.
+
+### Documentation-transport robustness experiment
+
+Where relevant chat or agent interfaces are still in scope, transport equivalent Markdown payloads containing nested triple-backtick fences using alternative outer delimiters and delivery mechanisms. Record truncation, delimiter corruption and rendering failures by tool and version.
+
+This tests the four-backtick transport convention as a tool/version-specific reliability practice. If the relevant interfaces have changed or the failure cannot be reproduced, the historical record is sufficient and no general convention should be promoted.
+
+### Practices without a separate experiment
+
+Deliberately asymmetric paste-block sizes, leading blank lines on paste blocks and retaining all short-lived recovery branches do not currently justify standalone experiments. Their observed purpose and non-promotion are preserved in the extraction-review journal entry. They may be incorporated as variables in a broader workflow experiment if later evidence makes them material.

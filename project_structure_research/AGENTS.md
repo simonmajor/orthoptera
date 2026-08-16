@@ -7,7 +7,7 @@ This directory is an intentionally provisional boundary for research into reusab
 Before changing this sub-project:
 
 * read the root `AGENTS.md` and the root project documents it makes applicable to the task;
-* read this directory's `README.md`, `PLAN.md` and relevant journal entries;
+* read this directory's `README.md`, `PLAN.md`, `FINDINGS.md`, `DECISIONS.md` and relevant journal entries;
 * inspect current repository state rather than relying on conversational history;
 * keep evidence, current planning, decisions and instructions distinct.
 
