@@ -153,7 +153,7 @@ The following invariants apply whenever documentation is being reorganised, redr
 
 **No implicit deletion invariant:** Material MUST NOT be considered safe to delete merely because it can be reconstructed from another document, from Git history, or from an earlier conversation. If it is useful knowledge in the document being transformed, preserve it unless deliberate deletion is part of the task.
 
-**Planning-separation invariant:** Historical journals record completed or past work. Forward-looking planning belongs in an appropriate planning document. A historical journal MUST NOT be used as an evolving task list.
+**Planning-separation invariant:** Historical journals record completed or past work in its contemporary epistemic state. An entry may therefore preserve implications, hypotheses, unresolved questions, speculation and proposed follow-up work produced by that work. Mutable planning documents record what is currently intended or sequenced. A historical journal MUST NOT be used as an evolving task list, and later changes to current intent MUST NOT rewrite its historical entries.
 
 **Uncertainty invariant:** Uncertainty is information. An unresolved question, tentative interpretation or explicit statement that something was not established MUST NOT be silently converted into a stronger conclusion or removed for the sake of concision.
 
