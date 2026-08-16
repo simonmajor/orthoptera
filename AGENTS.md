@@ -25,6 +25,8 @@ For substantial work, read the relevant documents rather than assuming that a fi
 
 Do not infer current architecture or priorities from `README.md` alone. It is an orientation document for humans, not the authoritative source for architecture, decisions, experiments, workflow or priorities.
 
+For work scoped to the provisional `project_structure_research/` sub-project, read `project_structure_research/AGENTS.md` before making changes there. This is an explicit discovery path for that provisional boundary, not a general decision about subordinate-instruction layout or automatic discovery.
+
 ---
 
 ## 2. Use the appropriate project record

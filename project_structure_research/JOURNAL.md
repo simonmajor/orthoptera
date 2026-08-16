@@ -6,6 +6,8 @@ This is the append-only historical journal for completed investigations and thei
 
 In normal operation, add entries as direct, contiguous paste blocks at the end of this file. Do not rewrite, reorder or remove earlier entries to align them with later understanding. Later entries may qualify, supersede or contradict earlier interpretations while preserving the earlier evidence, uncertainty and provenance.
 
+An entry records completed work in its contemporary epistemic state. It may therefore include implications, unresolved questions, speculation and possible follow-up work produced by that work. Such content remains historical evidence; it does not make the journal the mutable record of what is currently intended or sequenced. Later changes to current intent belong in `PLAN.md` and do not rewrite the earlier entry.
+
 An entry should retain enough context to distinguish observation, documentation, inference and unknowns. Where relevant, it should identify the host project and repository, exact host revision, exact revision of this reusable project, exact revisions of other relevant reusable projects, and relevant tool, model and environment versions.
 
 No final entry template or metadata syntax has been chosen. Until evidence supports one, preserve the required provenance in a clear human-readable form appropriate to the investigation.

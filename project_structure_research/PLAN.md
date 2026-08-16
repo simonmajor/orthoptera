@@ -1,6 +1,6 @@
 # Provisional Project-Structure Research Plan
 
-This is the mutable planning record for the provisional sub-project. Planned work is not evidence, a finding or a decision. Completed work should be recorded in `JOURNAL.md` without deleting the historical rationale that led to it.
+This is the mutable record of current intended work and sequencing for the provisional sub-project. Planned work is not evidence, a finding or a decision. Completed work should be recorded in `JOURNAL.md`. A completed-work entry may retain the implications, unresolved questions, speculation and possible follow-up work produced at that time; later changes to current intent modify this plan without rewriting that historical entry.
 
 ## Initial research questions
 

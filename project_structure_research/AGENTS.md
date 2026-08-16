@@ -11,7 +11,7 @@ Before changing this sub-project:
 * inspect current repository state rather than relying on conversational history;
 * keep evidence, current planning, decisions and instructions distinct.
 
-`JOURNAL.md` is append-only in normal operation. Add new historical material as direct, contiguous paste blocks at the end of the journal. Do not rewrite, reorder or clean up earlier entries when later work changes their interpretation; record the change in a later entry. Refine existing non-journal text with reviewable patches rather than whole-document replacement.
+`JOURNAL.md` is append-only in normal operation. Add new historical material as direct, contiguous paste blocks at the end of the journal. A completed-work entry may preserve implications, unresolved questions, speculation and possible follow-up work as understood at that time. `PLAN.md`, not the journal, records mutable current intent and sequencing. Do not rewrite, reorder or clean up earlier entries when later understanding or current intent changes; record a changed interpretation in a later entry. Refine existing non-journal text with reviewable patches rather than whole-document replacement.
 
 Preserve the root repository's documentation-preservation invariants, including historical evidence, uncertainty, provenance and changed interpretations. Recovery must precede structural reorganisation. Do not move or rename established Orthoptera or AI-toolchain records from work scoped to this directory unless a separate, explicit task and decision authorise it.
 
